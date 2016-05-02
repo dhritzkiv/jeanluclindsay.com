@@ -1,0 +1,77 @@
+$page-padding: 60px;
+$color-dark: #2f2f2f;
+$color-medium: #808780;
+
+
+html {
+	background-color: white;
+	font-family: Ingra, sans-serif;
+	font-size: 17px;
+	text-transform: lowercase;
+	color: $color-medium;
+	letter-spacing: 0.05em;
+	font-weight: 300;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-smoothing: antialiased;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+html.wf-loading {
+	a,
+	span,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	p,
+	li,
+	button
+	input {
+		opacity: 0.05;
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	color: $color-dark;
+	font-weight: 400;
+}
+
+a[href] {
+	color: inherit;
+	text-decoration: none;
+	
+	&:hover {
+		color: $color-dark;
+	}
+}
+
+nav {
+	margin-top: 98px;
+	margin-left: $page-padding;
+	margin-bottom: 32px;
+	line-height: 21px;
+	
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	
+	h1 {
+		font-size: 1em;
+		margin-bottom: 42px;
+	}
+}
