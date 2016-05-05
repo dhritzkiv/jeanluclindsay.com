@@ -3,7 +3,6 @@
 const app = require("ampersand-app");
 const AmpersandRouter = require("ampersand-router");
 
-const StartPage = require("./views/start");
 
 const SeriesCollection = require("./models/series");
 const SeriesModel = require("./models/a_series");
@@ -17,7 +16,7 @@ module.exports = AmpersandRouter.extend({
 		"(*path)": "catchAll"
 	},
 	start() {
-		this.trigger("newPage", new StartPage());
+		this.trigger("newPage", null);
 		
 		document.title = DEFAULT_TITLE;
 		
