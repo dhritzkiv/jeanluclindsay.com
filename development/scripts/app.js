@@ -5,6 +5,7 @@ const app = require('ampersand-app');
 const Router = require("./router");
 const WebFont = require("webfontloader");
 const MainView = require("./views/main");
+const SeriesCollection = require("./models/series");
 
 /*Raven.config("https://b2558f5fcd4342118dfb18e1dc0883e5@app.getsentry.com/64892", {
 	release: "__VERSION__",
@@ -17,6 +18,10 @@ app.extend({
 		/*ga('create', "UA-47020641-4", {
 			'siteSpeedSampleRate': 50
 		});*/
+		
+		this.series = new SeriesCollection();
+		
+		this.series.fetch();
 		
 		this.render();
 	},
