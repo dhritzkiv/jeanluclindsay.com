@@ -121,9 +121,4 @@ app
 	res.json(seriesData);
 });
 
-app.listen(app.get("port"), () => {
-	console.log(new Date());
-	console.log((
-		`Server for ${app.get('title')} v.${app.get('version')} ${app.settings.env} running and listening at port ${app.get('port')}`
-	));
-});
+app.listen(app.get("port"), () => console.log(`${new Date().toISOString()}: Server for ${app.get('title')} v.${app.get('version')} ${app.settings.env}, listening on port ${app.get('port')}`));
