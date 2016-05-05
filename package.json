@@ -19,6 +19,7 @@
     "ampersand-view": "^10.0.0",
     "ampersand-view-switcher": "^2.1.0",
     "express": "^4.13.4",
+    "highland": "^2.7.4",
     "postcss-assets": "^4.1.0",
     "raven-js": "^2.3.0",
     "webfontloader": "^1.6.24"

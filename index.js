@@ -2,8 +2,9 @@
 
 const path = require("path");
 const fs = require("fs");
-const os = require("os");
 const express = require("express");
+
+const seriesRouter = require(path.join(process.cwd(), "routes", "series"));
 const packageInfo = require(path.join(process.cwd(), "package.json"));
 const publicFileDirectory = path.join(process.cwd(), 'public');
 const indexFileContents = fs.readFileSync(path.join(publicFileDirectory, "index.html"), "utf8");
@@ -51,74 +52,9 @@ app
 	res.send(indexFileContents);
 });
 
-const contentDir = path.join(process.cwd(), "content");
-const seriesDir = path.join(contentDir, "series");
+app.get("/series", seriesRouter.getSeriesModels);
+app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
+app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
 
-const findSeries = (req, res, next) => {
-	const slug = req.params.slug;
-	const thisSeriesDir =  path.join(seriesDir, slug);
-	
-	const seriesData = {};
-	
-	fs.readdir(path.join(seriesDir, slug), (err, files) => {
-		
-		if (err) {
-			return next(err);
-		}
-		
-		const piecesManifestName = "pieces.csv";
-		
-		if (!files.includes(piecesManifestName)) {
-			return next(new Error("Pieces not found"));
-		}
-		
-		const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
-		
-		fs.readFile(piecesManifestPath, {
-			encoding: "utf8"
-		}, (err, file) => {
-			
-			if (err) {
-				return next(err);
-			}
-			
-			const rows = file.split(os.EOL);
-			
-			const headerRowColumns = rows
-			.shift()
-			.split(",")
-			.map(column => column.trim())
-			
-			seriesData.pieces = rows
-			.map(row => row.split(","))
-			.map(row => {
-				const data = {};
-				
-				row
-				.map(column => column.trim().replace(/^["']/, "").replace(/["']$/, ""))
-				.map((column, index) => [headerRowColumns[index], column])
-				.forEach(column => data[column[0]] = column[1]);
-				
-				data.image = data.image.split(",").map(image => image.trim());
-				
-				return data;
-			});
-			
-			req.resData.series = seriesData;
-			next();
-		});
-	});
-	
-	/*fs.readdir(path.join(seriesDir, slug), (err, files) => {
-		
-	});*/
-}
-
-app
-.route("/series/:slug")
-.get(findSeries, (req, res) => {
-	const seriesData = req.resData.series;
-	res.json(seriesData);
-});
 
 app.listen(app.get("port"), () => console.log(`${new Date().toISOString()}: Server for ${app.get('title')} v.${app.get('version')} ${app.settings.env}, listening on port ${app.get('port')}`));
