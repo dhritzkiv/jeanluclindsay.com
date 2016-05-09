@@ -1,7 +1,9 @@
 "use strict"
 
+import moment from "moment";
+import ajaxConfig from "../misc/ajax_config";
+
 const AmpersandModel = require("ampersand-model");
-const ajaxConfig = require("../misc/ajax_config");
 
 module.exports = AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
@@ -37,6 +39,19 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 			deps: ["images_uris"],
 			fn: function() {
 				return this.images_uris[0];
+			}
+		},
+		href: {
+			deps: ["title"],
+			fn: function() {
+				const pieceTitle = encodeURIComponent(this.title.toLowerCase());
+				return `${this.collection.parent.url()}/${pieceTitle}`;
+			}
+		},
+		year: {
+			deps: ["date"],
+			fn: function() {
+				return moment(new Date(this.date)).format("YYYY");
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 "use strict";
 
 const Model = require("ampersand-model");
-const ajaxConfig = require("../misc/ajax_config");
+import ajaxConfig from "../misc/ajax_config";
 const PiecesCollection = require("./pieces");
 
 module.exports = Model.extend(ajaxConfig, {
@@ -13,6 +13,14 @@ module.exports = Model.extend(ajaxConfig, {
 		},
 		title: {
 			type: "string"
+		}
+	},
+	derived: {
+		href: {
+			deps: ["slug"],
+			fn: function() {
+				return this.url();
+			}
 		}
 	},
 	collections: {

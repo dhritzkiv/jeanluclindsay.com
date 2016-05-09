@@ -24,6 +24,10 @@ body {
 	padding: 0;
 }
 
+body * {
+	box-sizing: border-box;
+}
+
 html.wf-loading {
 	a,
 	span,
@@ -58,8 +62,14 @@ a[href] {
 	}
 }
 
-main:not(:empty) {
-	border-bottom: 1px solid $color-medium;
+main {
+	opacity: 0;
+	transition: opacity 300ms ease-out;
+
+	&:not(:empty) {
+		opacity: 1;
+		border-bottom: 1px solid rgba($color-medium, 0.5);
+	}
 }
 
 nav#site-logo {
@@ -87,33 +97,43 @@ nav#site-nav {
 }
 
 article.a_series {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	
 	header {
 		position: relative;
 		margin-left: $page-padding;
+		margin-bottom: 12px;
 		
 		a {
 			position: absolute;
 			display: block;
-			top: 0;
+			top: 2px;
 			width: 21px;
 			height: 21px;
-			margin-left: -$page-padding/2;
+			margin-left: -$page-padding;
+			width: $page-padding;
+			text-align: center;
+			font-size: 1.5em;
+			line-height: 21px;
+			color: $color-medium;
+			font-weight: 200;
 		}
 		
 		h2 {
 			font-size: 1em;
+			color: $color-dark;
+			font-weight: 200;
+			margin: 0;
 		}
 	}
 }
 
-article.piece {
-	
-}
-
 [data-hook=pieces-grid] {
-	margin-top: 32px;
-	margin-left: $page-padding;
-	margin-right: $page-padding;
+	margin-top: 12px;
+	padding-left: $page-padding;
+	padding-right: $page-padding;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -121,24 +141,7 @@ article.piece {
 	align-items: center;
 }
 
-.piece.thumbnail {
-	width: 196px;
-	padding: 0 36px;
-	margin-bottom: 52px;
-	
-	figure {
-		padding: 0;
-		margin: 0 0 21px 0;
-		max-height: 268px;
-		overflow: hidden;
-		background-color: rgba(yellow, 0.2);
-		line-height: 0;
-		
-		img {
-			width: 100%;
-		}
-	}
-	
+article.piece {
 	h2,
 	h3 {
 		font-weight: 300;
@@ -150,4 +153,62 @@ article.piece {
 	h3 {
 		color: $color-medium;
 	}
+	
+	figure {
+		margin: 0 0 21px 0;
+		padding: 0;
+		
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+	
+	&.thumbnail {
+		width: 196px;
+		padding: 0 36px;
+		margin-bottom: 52px;
+		box-sizing: content-box;
+		
+		figure {
+			padding: 0;
+			margin: 0 0 21px 0;
+			max-height: 268px;
+			overflow: hidden;
+			background-color: rgba(yellow, 0.2);
+			line-height: 0;
+		}
+	}
+
+	&.expanded {
+		
+		figure {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			padding-left: $page-padding;
+			
+			figcaption {
+				flex: 0 0 auto;
+				order: 0;	
+				width: 196px;
+				padding-right: 12px;
+				font-size: 12px;
+			}
+			
+			[data-hook=images] {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				order: 1;
+				flex: 0 1 auto;
+				
+				img {
+					max-width: 640px;
+				}
+			}
+		}
+	}	
 }

@@ -1,5 +1,7 @@
 "use strict";
 
+import "babel-polyfill";
+
 const app = require('ampersand-app');
 //const Raven = require("raven-js");
 const Router = require("./router");

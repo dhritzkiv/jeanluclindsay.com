@@ -4,6 +4,7 @@ const app = require("ampersand-app");
 const AmpersandRouter = require("ampersand-router");
 
 const ASeriesPage = require("./views/a_series");
+const ASeriesPiecePage = require("./views/piece");
 
 const SeriesCollection = require("./models/series");
 const SeriesModel = require("./models/a_series");
@@ -13,7 +14,8 @@ const DEFAULT_TITLE = "Jean-Luc Lindsay";
 module.exports = AmpersandRouter.extend({
 	routes: {
 		"": "start",
-		"series/:series": "series",
+		"series/:series": "aSeries",
+		"series/:series/:piece": "aSeriesPiece",
 		"(*path)": "catchAll"
 	},
 	start() {
@@ -23,10 +25,11 @@ module.exports = AmpersandRouter.extend({
 		
 		this.trigger("navigation");		
 	},
-	series(seriesSlug) {		
-		const series = app.series;
-		
-		series.getOrFetch(seriesSlug, (err, seriesModel) => {
+	_getASeries(slug, callback) {		
+		app.series.getOrFetch(slug, callback);
+	},
+	aSeries(seriesSlug) {
+		this._getASeries(seriesSlug, (err, seriesModel) => {
 			
 			if (err) {
 				return console.error(err);
@@ -34,9 +37,55 @@ module.exports = AmpersandRouter.extend({
 			
 			seriesModel.pieces.fetch();
 			
-			this.trigger("newPage", new ASeriesPage({
+			const view = new ASeriesPage({
 				model: seriesModel
-			}));
+			});
+			
+			this.trigger("newPage", view);
+		});
+	},
+	aSeriesPiece(seriesSlug, pieceTitle) {
+		
+		const router = this;
+		
+		pieceTitle = pieceTitle.toLowerCase();
+		
+		//pieceTitle is likely to be "Untitled",
+		//which isn't good as an ID.
+		//solution: MD5:
+		// - the image;
+		// - the entire static JSON; or,
+		// - add more specific identifiers
+		
+		this._getASeries(seriesSlug, (err, seriesModel) => {
+			
+			if (err) {
+				return console.error(err);
+			}
+			
+			const pieces = seriesModel.pieces;
+			
+			pieces.fetch({
+				always: (err) => {
+					
+					if (err) {
+						return console.error(err);
+					}
+					
+					const piece = pieces.models.find(piece => pieceTitle === piece.title.toLowerCase());
+					
+					if (!piece) {
+						console.error(new Error("Piece not found"));
+					}
+					
+					const view = new ASeriesPiecePage({
+						model: piece,
+						collection: pieces
+					});
+					
+					router.trigger("newPage", view);
+				}
+			});			
 		});
 	},
 	catchAll() {

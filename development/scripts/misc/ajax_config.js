@@ -2,7 +2,7 @@
 
 //A reusable mixin for providing sensible default ajax headers: JSON Content-Type.
 
-module.exports = {
+export default {
 	ajaxConfig: {
 		headers: {
 			'Accept': "application/json",
