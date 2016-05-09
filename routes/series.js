@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 const h = require("highland");
+const csvParse = require("csv-parse");
 
 const cpuCount = os.cpus().length;
 
@@ -59,48 +60,39 @@ exports.findASeries = (req, res, next) => {
 
 exports.findASeriesPieces = (req, res, next) => {
 	const seriesData = req.resData.series;
-	const thisSeriesDir = path.join(seriesDir, seriesData.slug);
-	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
+	const piecesManifestPath = path.join(seriesDir, seriesData.slug, piecesManifestName);
 	
-	fs.readFile(piecesManifestPath, {
+	const readStream = fs.createReadStream(piecesManifestPath, {
 		encoding: "utf8"
-	}, (err, file) => {
-		
-		if (err) {
-			return next(err);
-		}
-		
-		const rows = file.split(os.EOL);
-		
-		const headerRowColumns = rows
-		.shift()
+	});
+	
+	const csvParser = csvParse({
+		delimiter: ",",
+		columns: true,
+		skip_empty_lines: true,
+		trim: true
+	});
+	
+	h(csvParser)
+	.map(pieceData => {
+		pieceData.title = pieceData.title || "Untitled";
+			
+		pieceData.images = (pieceData.images || "")
 		.split(",")
-		.map(column => column.trim())
+		.map(image => image.trim());
 		
-		const pieces = rows
-		.map(row => row.split(","))
-		.map(row => {
-			const data = {};
-			
-			row
-			.map(column => column.trim().replace(/^["']/, "").replace(/["']$/, ""))
-			.map((column, index) => [headerRowColumns[index], column])
-			.forEach(column => data[column[0]] = column[1]);
-			
-			data.title = data.title || "Untitled";
-			
-			data.images = (data.images || "")
-			.split(",")
-			.map(image => image.trim());
-			
-			return data;
-		});
-		
+		return pieceData;
+	})
+	.sortBy((a, b) => new Date(b.date.toString()) - new Date(a.date.toString()))
+	.toArray(pieces => {
 		req.resData.pieces = pieces;
 		next();
 	});
+	
+	readStream.pipe(csvParser);
 };
 
 exports.getASeries = (req, res) => res.json(req.resData.series);
 
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
+
