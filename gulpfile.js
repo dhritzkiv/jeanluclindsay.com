@@ -80,6 +80,7 @@ function makeBundler(src) {
 	});
 	
 	bundler.plugin('watchify');
+	bundler.transform('rollupify');
 	bundler.transform('babelify');
 
 	bundler.transform('browserify-versionify', {
