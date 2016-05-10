@@ -1,7 +1,8 @@
+@import "easings";
+
 $page-padding: 60px;
 $color-dark: #2f2f2f;
 $color-medium: #808780;
-
 
 html {
 	background-color: white;
@@ -63,12 +64,27 @@ a[href] {
 }
 
 main {
-	opacity: 0;
-	transition: opacity 300ms ease-out;
+	position: relative;
+	transition: height 0ms $easeOutExpo, border-color 0ms $easeOutExpo;
+	overflow: hidden;
+	border-bottom: 1px solid white;
 
 	&:not(:empty) {
-		opacity: 1;
-		border-bottom: 1px solid rgba($color-medium, 0.5);
+		border-color: rgba($color-medium, 0.5);
+	}
+		
+	&.opening,
+	&.closing {
+		transition-duration: 700ms, 700ms;
+		pointer-events: none;
+		
+		&:not(:empty) {
+			margin-bottom: 100vh;
+		}
+	}
+	
+	&.opening {
+		transition-timing-function: $easeInOutExpo;
 	}
 }
 
@@ -86,13 +102,18 @@ nav#site-logo {
 nav#site-nav {
 	margin-left: $page-padding;
 	line-height: 21px;
-	margin-top: 20px;
-	margin-bottom: 32px;
+	padding-top: 20px;
+	padding-bottom: 32px;
+	transition: padding 700ms $easeOutExpo -50ms;
 	
 	ul {
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+	
+	main:empty + & {
+		padding-top: 0;
 	}
 }
 

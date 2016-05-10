@@ -35,13 +35,15 @@ module.exports = AmpersandRouter.extend({
 				return console.error(err);
 			}
 			
-			seriesModel.pieces.fetch();
-			
 			const view = new ASeriesPage({
 				model: seriesModel
 			});
 			
-			this.trigger("newPage", view);
+			seriesModel.pieces.fetch({
+				always: () => {
+					this.trigger("newPage", view);
+				}
+			});
 		});
 	},
 	aSeriesPiece(seriesSlug, id) {
