@@ -3,6 +3,7 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const crypto = require('crypto');
 const h = require("highland");
 const csvParse = require("csv-parse");
 
@@ -60,11 +61,10 @@ exports.findASeries = (req, res, next) => {
 
 exports.findASeriesPieces = (req, res, next) => {
 	const seriesData = req.resData.series;
-	const piecesManifestPath = path.join(seriesDir, seriesData.slug, piecesManifestName);
+	const thisSeriesDir = path.join(seriesDir, seriesData.slug);
+	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 	
-	const readStream = fs.createReadStream(piecesManifestPath, {
-		encoding: "utf8"
-	});
+	const readStream = fs.createReadStream(piecesManifestPath);
 	
 	const csvParser = csvParse({
 		delimiter: ",",
@@ -83,7 +83,27 @@ exports.findASeriesPieces = (req, res, next) => {
 		
 		return pieceData;
 	})
-	.sortBy((a, b) => new Date(b.date.toString()) - new Date(a.date.toString()))
+	.filter(pieceData => pieceData.images.length)
+	.map(pieceData => {
+		const image = pieceData.images[0];
+		const imageReadStream = fs.createReadStream(path.join(thisSeriesDir, image));
+		const hash = crypto.createHash('md5');
+		
+		return h(imageReadStream.pipe(hash))
+		.map(buffer => {
+			const id = buffer
+			.toString("base64")
+			.slice(0, 22)//strip extra 2 characters
+			.toLowerCase()//this reduces uniquness, but it's still enough
+			.replace(/\//g, "_")
+			.replace(/\+/g, "-");
+			
+			pieceData.id = id;
+			return pieceData;
+		});
+	})
+	.parallel(cpuCount)
+	.sortBy((a, b) => new Date(a.date.toString()) - new Date(b.date.toString()))
 	.toArray(pieces => {
 		req.resData.pieces = pieces;
 		next();

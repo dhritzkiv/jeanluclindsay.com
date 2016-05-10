@@ -8,6 +8,9 @@ const AmpersandModel = require("ampersand-model");
 module.exports = AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
 	props: {
+		id: {
+			type: "string"
+		},
 		title: {
 			type: "string"
 		},
@@ -42,10 +45,9 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 			}
 		},
 		href: {
-			deps: ["title"],
+			deps: ["id"],
 			fn: function() {
-				const pieceTitle = encodeURIComponent(this.title.toLowerCase());
-				return `${this.collection.parent.url()}/${pieceTitle}`;
+				return `${this.collection.parent.url()}/${this.id}`;
 			}
 		},
 		year: {

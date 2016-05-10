@@ -15,7 +15,7 @@ module.exports = AmpersandRouter.extend({
 	routes: {
 		"": "start",
 		"series/:series": "aSeries",
-		"series/:series/:piece": "aSeriesPiece",
+		"series/:series/:pieceId": "aSeriesPiece",
 		"(*path)": "catchAll"
 	},
 	start() {
@@ -44,11 +44,9 @@ module.exports = AmpersandRouter.extend({
 			this.trigger("newPage", view);
 		});
 	},
-	aSeriesPiece(seriesSlug, pieceTitle) {
+	aSeriesPiece(seriesSlug, id) {
 		
 		const router = this;
-		
-		pieceTitle = pieceTitle.toLowerCase();
 		
 		//pieceTitle is likely to be "Untitled",
 		//which isn't good as an ID.
@@ -72,7 +70,7 @@ module.exports = AmpersandRouter.extend({
 						return console.error(err);
 					}
 					
-					const piece = pieces.models.find(piece => pieceTitle === piece.title.toLowerCase());
+					const piece = pieces.get(id);
 					
 					if (!piece) {
 						console.error(new Error("Piece not found"));
