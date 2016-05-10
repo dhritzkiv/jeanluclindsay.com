@@ -20,10 +20,10 @@
     "ampersand-view-switcher": "^2.1.0",
     "csv-parse": "^1.1.0",
     "express": "^4.13.4",
-    "highland": "^2.7.4",
+    "highland": "^2.8.1",
     "moment": "^2.13.0",
     "postcss-assets": "^4.1.0",
-    "raven-js": "^3.0.2",
+    "raven-js": "^3.0.3",
     "webfontloader": "^1.6.24"
   },
   "devDependencies": {
