@@ -80,7 +80,7 @@ main {
 	}
 	
 	&.opening {
-		transition-timing-function: $easeInOutExpo;
+		transition-timing-function: $easeInOutExpo, $easeInOutExpo;
 	}
 }
 
