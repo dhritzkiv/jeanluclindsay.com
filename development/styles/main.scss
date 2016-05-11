@@ -77,10 +77,6 @@ main {
 	&.closing {
 		transition-duration: 700ms, 700ms;
 		pointer-events: none;
-		
-		&:not(:empty) {
-			margin-bottom: 100vh;
-		}
 	}
 	
 	&.opening {
