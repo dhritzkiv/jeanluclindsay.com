@@ -31,11 +31,13 @@ exports.getSeriesModels = (req, res, next) => {
 		statStream(path.join(seriesDir, filename))
 		.map(stat => ({
 			filename,
+			created_date: stat.birthtime,
 			isDirectory: stat.isDirectory()
 		}))
 	)
 	.parallel(cpuCount)
 	.filter(fileObject => fileObject.isDirectory)
+	.sortBy((a, b) => b.created_date - a.created_date)
 	.map(fileObject => fileObject.filename)
 	.map(toSeriesModel)
 	.toArray(series => res.json(series))
