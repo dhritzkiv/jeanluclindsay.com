@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const express = require("express");
 
+const miscRouter = require(path.join(process.cwd(), "routes", "misc"));
 const seriesRouter = require(path.join(process.cwd(), "routes", "series"));
 
 const publicFilesDirectory = path.join(process.cwd(), 'public');
@@ -59,5 +60,7 @@ app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeri
 app.use("/series", express.static(seriesFilesDirectory, {
 	maxAge: 1000 * 60 * 60 * 24
 }));
+
+app.get("/about", miscRouter.getBio);
 
 app.listen(app.get("port"), () => console.log(`${new Date().toISOString()}: Server for ${app.get('title')} v.${app.get('version')} ${app.settings.env}, listening on port ${app.get('port')}`));

@@ -1,10 +1,12 @@
 "use strict";
 
 const app = require("ampersand-app");
+const xhr = require("xhr");
 const AmpersandRouter = require("ampersand-router");
 
 const ASeriesPage = require("./views/a_series");
 const ASeriesPiecePage = require("./views/piece");
+const AboutPage = require("./views/about");
 
 const SeriesCollection = require("./models/series");
 const SeriesModel = require("./models/a_series");
@@ -14,6 +16,7 @@ const DEFAULT_TITLE = "Jean-Luc Lindsay";
 module.exports = AmpersandRouter.extend({
 	routes: {
 		"": "start",
+		"about": "about",
 		"series/:series": "aSeries",
 		"series/:series/:pieceId": "aSeriesPiece",
 		"(*path)": "catchAll"
@@ -24,6 +27,23 @@ module.exports = AmpersandRouter.extend({
 		document.title = DEFAULT_TITLE;
 		
 		this.trigger("navigation");		
+	},
+	about() {
+		const router = this;
+		
+		xhr({
+			url: "/about",
+			json: true
+		}, (err, res, body) => {
+			
+			if (err) {
+				
+			}
+			
+			const view = new AboutPage(body);
+			
+			router.trigger("newPage", view);
+		});
 	},
 	_getASeries(slug, callback) {		
 		app.series.getOrFetch(slug, callback);
