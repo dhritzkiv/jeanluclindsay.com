@@ -50,16 +50,10 @@ exports.findASeries = (req, res, next) => {
 	if (!slug) {
 		return next(new Error("Missing series"));
 	}
+		
+	req.resData.series = toSeriesModel(slug);
 	
-	fs.access(path.join(seriesDir, slug), (err) => {
-		
-		if (err) {
-			return next(err);
-		}
-		
-		req.resData.series = toSeriesModel(slug);
-		next();
-	});
+	fs.access(path.join(seriesDir, slug), next);
 };
 
 exports.findASeriesPieces = (req, res, next) => {
