@@ -14,7 +14,7 @@ const seriesDir = path.join(contentDir, "series");
 const piecesManifestName = "pieces.csv";
 	
 const toSeriesModel = name => ({
-	slug: encodeURIComponent(name.replace(" ", "_").toLowerCase()),
+	slug: name,
 	title: name
 });
 
@@ -44,7 +44,7 @@ exports.getSeriesModels = (req, res, next) => {
 };
 
 exports.findASeries = (req, res, next) => {
-	const slug = (req.params.slug || "").replace("_", " ");
+	const slug = req.params.slug;
 	
 	if (!slug) {
 		return next(new Error("Missing series"));

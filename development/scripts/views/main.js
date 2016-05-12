@@ -14,16 +14,8 @@ const SeriesItem = View.extend({
 			<a></a>
 		</li>`
 	),
-	derived: {
-		href: {
-			deps: ["model.url"],
-			fn: function() {
-				return this.model.url();
-			}
-		}
-	},
 	bindings: {
-		"href": {
+		"model.href": {
 			type: "attribute",
 			name: "href",
 			selector: "a"

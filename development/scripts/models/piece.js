@@ -47,7 +47,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		href: {
 			deps: ["id"],
 			fn: function() {
-				return `${this.collection.parent.url()}/${this.id}`;
+				return `${this.collection.parent.href}/${this.id}`;
 			}
 		},
 		year: {
