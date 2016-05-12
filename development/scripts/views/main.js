@@ -62,25 +62,25 @@ module.exports = View.extend({
 			hide: (oldView, callback) => {
 				const height = mainEl.clientHeight;
 				
-				mainEl.style.height = `${height}px`;
-					   
 				scroller.top(document.scrollingElement, 0, {
-					duration: 350,
+					duration: TRANSITION_TIMEOUT / 2,
 					ease: "inOutSine"
-				});
+				}, (err) => {
+					mainEl.style.height = `${height}px`;
 				
-				requestAnimationFrame(() => {
-					mainEl.getBoundingClientRect();
-					mainEl.classList.add(CLASS_CLOSING);
-					mainEl.style.height = "0px"
-				});
-				
-				setTimeout(() => {
-					mainEl.style.height = "";
-					mainEl.classList.remove(CLASS_CLOSING);
+					requestAnimationFrame(() => {
+						mainEl.getBoundingClientRect();
+						mainEl.classList.add(CLASS_CLOSING);
+						mainEl.style.height = "0px"
+					});
 					
-					callback();
-				}, TRANSITION_TIMEOUT);
+					setTimeout(() => {
+						mainEl.style.height = "";
+						mainEl.classList.remove(CLASS_CLOSING);
+						
+						callback();
+					}, TRANSITION_TIMEOUT);
+				});				
 			},
 			show: (newView) => {
 				const height = mainEl.clientHeight;
