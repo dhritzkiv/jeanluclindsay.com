@@ -26,9 +26,10 @@ exports.getSeriesModels = (req, res, next) => {
 	const series = [];
 	
 	readdirStream(seriesDir).flatten()
-	//.stopOnError(err => next(err))
+	.errors(err => console.error(err))
 	.map(filename => 
 		statStream(path.join(seriesDir, filename))
+		.errors(err => console.error(err))
 		.map(stat => ({
 			filename,
 			created_date: stat.birthtime,
@@ -75,7 +76,10 @@ exports.findASeriesPieces = (req, res, next) => {
 		trim: true
 	});
 	
-	h(csvParser)
+	h(readStream)
+	.errors(err => {})
+	.through(csvParser)
+	.errors(err => console.error(err))
 	.map(pieceData => {
 		pieceData.title = pieceData.title || "Untitled";
 			
@@ -88,10 +92,10 @@ exports.findASeriesPieces = (req, res, next) => {
 	.filter(pieceData => pieceData.images.length)
 	.map(pieceData => {
 		const image = pieceData.images[0];
-		const imageReadStream = fs.createReadStream(path.join(thisSeriesDir, image));
-		const hash = crypto.createHash('md5');
 		
-		return h(imageReadStream.pipe(hash))
+		return h(fs.createReadStream(path.join(thisSeriesDir, image)))
+		.errors(() => {})
+		.through(crypto.createHash('md5'))
 		.map(buffer => {
 			const id = buffer
 			.toString("base64")
@@ -101,6 +105,7 @@ exports.findASeriesPieces = (req, res, next) => {
 			.replace(/\+/g, "-");
 			
 			pieceData.id = id;
+			
 			return pieceData;
 		});
 	})
@@ -110,8 +115,6 @@ exports.findASeriesPieces = (req, res, next) => {
 		req.resData.pieces = pieces;
 		next();
 	});
-	
-	readStream.pipe(csvParser);
 };
 
 exports.getASeries = (req, res) => res.json(req.resData.series);
