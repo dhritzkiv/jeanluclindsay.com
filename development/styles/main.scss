@@ -61,22 +61,27 @@ a[href] {
 
 main {
 	position: relative;
-	transition: height 0ms $easeOutExpo, border-color 0ms $easeOutExpo;
+	transition: height 0ms $easeOutExpo, opacity 700ms $easeInOutExpo;
 	overflow: hidden;
-	border-bottom: 1px solid white;
+	border-bottom: 1px solid rgba($color-medium, 0.5);
+	margin-top: 22px;
+	margin-bottom: 20px;
+	opacity: 0;
 
 	&:not(:empty) {
-		border-color: rgba($color-medium, 0.5);
+		opacity: 1;
 	}
 		
 	&.opening,
 	&.closing {
-		transition-duration: 700ms, 700ms;
+		transition-duration: 700ms;
 		pointer-events: none;
+		opacity: 1;
 	}
 	
 	&.opening {
 		transition-timing-function: $easeInOutExpo, $easeInOutExpo;
+		opacity: 1;
 	}
 }
 
@@ -84,7 +89,7 @@ nav#site-logo {
 	margin-left: $page-padding;
 	line-height: 21px;
 	margin-top: 98px;
-	margin-bottom: 42px;
+	margin-bottom: 20px;
 	
 	h1 {
 		font-size: 1em;
@@ -94,18 +99,12 @@ nav#site-logo {
 nav#site-nav {
 	margin-left: $page-padding;
 	line-height: 21px;
-	padding-top: 20px;
 	padding-bottom: 32px;
-	transition: padding 700ms $easeOutExpo -50ms;
 	
 	ul {
 		margin: 0;
 		padding: 0;
 		list-style: none;
-	}
-	
-	main:empty + & {
-		padding-top: 0;
 	}
 }
 
