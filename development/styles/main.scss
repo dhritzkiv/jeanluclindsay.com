@@ -113,6 +113,27 @@ nav#site-nav {
 	max-width: 720px;
 }
 
+%close-button {
+	position: absolute;
+	display: block;
+	top: 2px;
+	width: 21px;
+	height: 21px;
+	margin-left: -$page-padding;
+	width: $page-padding;
+	text-align: center;
+	font-size: 1.5em;
+	line-height: 21px;
+	color: $color-medium;
+	font-weight: 200;
+	transition: opacity 250ms $easeOutExpo;
+	
+	main.closing &,
+	main.opening & {
+		opacity: 0;
+	}
+}
+
 article.a_series {
 	display: flex;
 	flex-direction: column;
@@ -124,18 +145,7 @@ article.a_series {
 		margin-bottom: 12px;
 		
 		a {
-			position: absolute;
-			display: block;
-			top: 2px;
-			width: 21px;
-			height: 21px;
-			margin-left: -$page-padding;
-			width: $page-padding;
-			text-align: center;
-			font-size: 1.5em;
-			line-height: 21px;
-			color: $color-medium;
-			font-weight: 200;
+			@extend %close-button;
 		}
 		
 		h2 {
