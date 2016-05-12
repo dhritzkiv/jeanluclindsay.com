@@ -15,6 +15,7 @@ module.exports = AmpersandView.extend({
 						<div data-hook="images"></div>
 						<figcaption>
 							<h3 data-hook="materials"></h3>
+							<h3 data-hook="size"></h3>
 							<h3 data-hook="year"></h3>
 						</figcaption>
 					</figure>
@@ -35,6 +36,10 @@ module.exports = AmpersandView.extend({
 		"model.materials": {
 			type: "text",
 			hook: "materials"
+		},
+		"model.size": {
+			type: "text",
+			hook: "size"
 		},
 		"model.year": {
 			type: "text",
