@@ -71,13 +71,6 @@ module.exports = AmpersandRouter.extend({
 		
 		const router = this;
 		
-		//pieceTitle is likely to be "Untitled",
-		//which isn't good as an ID.
-		//solution: MD5:
-		// - the image;
-		// - the entire static JSON; or,
-		// - add more specific identifiers
-		
 		this._getASeries(seriesSlug, (err, seriesModel) => {
 			
 			if (err) {
