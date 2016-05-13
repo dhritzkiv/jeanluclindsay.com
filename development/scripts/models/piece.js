@@ -30,7 +30,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 	derived: {
 		images_uris: {
 			deps: ["images", "parent.slug"],
-			fn: function() {
+			fn() {
 				const parent = this.collection.parent;
 				const seriesUrl = parent.url();
 				
@@ -39,13 +39,19 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		},
 		first_image_uri: {
 			deps: ["images_uris"],
-			fn: function() {
+			fn() {
 				return this.images_uris[0];
+			}
+		},
+		first_image_thumbnail_uri: {
+			deps: ["first_image_uri"],
+			fn() {
+				return this.first_image_uri.replace(/^(.+)(\.[a-z]{3,4})$/g, "$1_t$2");
 			}
 		},
 		href: {
 			deps: ["id"],
-			fn: function() {
+			fn() {
 				return `${this.collection.parent.href}/${this.id}`;
 			}
 		},
@@ -55,6 +61,16 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 				return this.date.toString().slice(0, 4);
 			}
 		}
+	},
+	preloadThumbnail(callback) {
+		const image = new Image();
+		
+		image.addEventListener("load", callback);
+		image.addEventListener("error", callback);
+		
+		image.src = this.first_image_thumbnail_uri;
+		
+		return image;
 	}
 });
 

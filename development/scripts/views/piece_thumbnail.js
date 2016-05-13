@@ -28,7 +28,7 @@ module.exports = AmpersandView.extend({
 			type: "text",
 			hook: "year"
 		},
-		"model.first_image_uri": {
+		"model.first_image_thumbnail_uri": {
 			type: "attribute",
 			name: "src",
 			selector: "img"

@@ -50,6 +50,8 @@ module.exports = AmpersandRouter.extend({
 		app.series.getOrFetch(slug, callback)
 	},
 	aSeries(seriesSlug) {
+		const router = this;
+		
 		this._getASeries(seriesSlug, (err, seriesModel) => {
 			
 			if (err) {
@@ -62,13 +64,23 @@ module.exports = AmpersandRouter.extend({
 			
 			seriesModel.pieces.fetch({
 				always: () => {
-					this.trigger("newPage", view);
+					let loaded = 0;
+					const toLoad = seriesModel.pieces.length;
+					
+					const checkCallback = () => {
+						loaded++;
+						
+						if (loaded >= toLoad) {
+							router.trigger("newPage", view);
+						}
+					};
+					
+					seriesModel.pieces.forEach(piece => piece.preloadThumbnail(checkCallback));
 				}
 			});
 		});
 	},
 	aSeriesPiece(seriesSlug, id) {
-		
 		const router = this;
 		
 		this._getASeries(seriesSlug, (err, seriesModel) => {
