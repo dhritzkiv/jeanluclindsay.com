@@ -61,27 +61,26 @@ a[href] {
 
 main {
 	position: relative;
-	transition: height 0ms $easeOutExpo, opacity 700ms $easeInOutExpo;
+	transition: height 0ms $easeOutExpo, border-color 700ms $easeInOutExpo;
 	overflow: hidden;
-	border-bottom: 1px solid rgba($color-medium, 0.5);
+	border-bottom: 1px solid white;
 	margin-top: 22px;
 	margin-bottom: 20px;
-	opacity: 0;
 
 	&:not(:empty) {
-		opacity: 1;
+		border-color: rgba($color-medium, 0.5);
+		transition-duration: 0ms, 50ms;
 	}
 		
 	&.opening,
 	&.closing {
-		transition-duration: 700ms;
+		transition-duration: 700ms, 50ms;
 		pointer-events: none;
-		opacity: 1;
 	}
 	
 	&.opening {
 		transition-timing-function: $easeInOutExpo, $easeInOutExpo;
-		opacity: 1;
+		transition-duration: 700ms, 50ms;
 	}
 }
 
@@ -116,13 +115,14 @@ nav#site-nav {
 %close-button {
 	position: absolute;
 	display: block;
-	top: 2px;
+	top: 0px;
 	width: 21px;
 	height: 21px;
 	margin-left: -$page-padding;
 	width: $page-padding;
 	text-align: center;
-	font-size: 1.5em;
+	font-family: "Lucida", "Lucida Grande", "Lucida Console", monospace;
+	font-size: 1em;
 	line-height: 21px;
 	color: $color-medium;
 	font-weight: 200;
