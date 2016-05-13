@@ -21,7 +21,6 @@
     "csv-parse": "^1.1.0",
     "express": "^4.13.4",
     "highland": "^2.8.1",
-    "moment": "^2.13.0",
     "raven-js": "^3.0.4",
     "remarkable": "^1.6.2",
     "scroll": "^1.0.0",

@@ -1,6 +1,5 @@
 "use strict"
 
-import moment from "moment";
 import ajaxConfig from "../misc/ajax_config";
 
 const AmpersandModel = require("ampersand-model");
@@ -52,8 +51,8 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		},
 		year: {
 			deps: ["date"],
-			fn: function() {
-				return moment(new Date(this.date)).format("YYYY");
+			fn() {
+				return this.date.toString().slice(0, 4);
 			}
 		}
 	}
