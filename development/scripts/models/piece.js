@@ -46,6 +46,12 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		}
 	},
 	derived: {
+		url_safe_title: {
+			deps: ["title"],
+			fn() {
+				return this.title.toLowerCase().replace(/[,\.:]/g, " ").replace(/\s/g, "_")
+			}
+		},
 		images_uris: {
 			deps: ["images", "parent.slug"],
 			fn() {
@@ -70,7 +76,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		href: {
 			deps: ["id"],
 			fn() {
-				return `${this.collection.parent.href}/${this.id}`;
+				return `${this.collection.parent.href}/${this.id}-${this.url_safe_title}`;
 			}
 		},
 		year: {
