@@ -1,7 +1,8 @@
 "use strict";
 
-const Collection = require("ampersand-rest-collection");
 import ajaxConfig from "../misc/ajax_config";
+
+const Collection = require("ampersand-rest-collection");
 const SeriesModel = require("./a_series");
 
 module.exports = Collection.extend(ajaxConfig, {

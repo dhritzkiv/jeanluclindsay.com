@@ -73,6 +73,8 @@ app.use((err, req, res, next) => {
 	res.json({
 		message: new Error("Server error").message
 	});
+
+	next();
 });
 
 app.listen(app.get("port"), () => console.log(`${new Date().toISOString()}: Server for ${app.get("title")} v.${app.get("version")} ${app.settings.env}, listening on port ${app.get("port")}`));

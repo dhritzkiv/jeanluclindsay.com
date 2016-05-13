@@ -1,3 +1,5 @@
+/*globals app*/
+
 "use strict";
 
 const View = require("ampersand-view");
@@ -65,7 +67,7 @@ module.exports = View.extend({
 				scroller.top(document.scrollingElement, 0, {
 					duration: TRANSITION_TIMEOUT / 2,
 					ease: "inOutSine"
-				}, (err) => {
+				}, () => {
 					mainEl.style.height = `${height}px`;
 
 					requestAnimationFrame(() => {
@@ -82,8 +84,9 @@ module.exports = View.extend({
 					}, TRANSITION_TIMEOUT);
 				});
 			},
-			show: (newView) => {
+			show: () => {
 				const height = mainEl.clientHeight;
+
 				mainEl.style.height = "0px";
 				mainEl.classList.remove(CLASS_CLOSING);
 				mainEl.classList.add(CLASS_OPENING);

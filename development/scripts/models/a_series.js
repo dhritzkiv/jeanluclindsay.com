@@ -1,7 +1,8 @@
 "use strict";
 
-const Model = require("ampersand-model");
 import ajaxConfig from "../misc/ajax_config";
+
+const Model = require("ampersand-model");
 const PiecesCollection = require("./pieces");
 
 module.exports = Model.extend(ajaxConfig, {
@@ -20,6 +21,7 @@ module.exports = Model.extend(ajaxConfig, {
 			deps: ["slug"],
 			fn() {
 				const safeSlug = this.slug.replace(/\s/, "_");
+
 				return `${this.urlRoot}/${safeSlug}`;
 			}
 		}

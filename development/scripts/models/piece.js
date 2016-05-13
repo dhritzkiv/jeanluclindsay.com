@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
@@ -7,30 +7,30 @@ const AmpersandModel = require("ampersand-model");
 
 const preloadImage = (src, callback) => {
 	const image = new Image();
-		
+
 	const imageCallback = () => {
 		image.removeEventListener("load", imageCallback);
 		image.removeEventListener("error", imageCallback);
 		callback();
 	};
-	
+
 	image.addEventListener("load", imageCallback);
 	image.addEventListener("error", imageCallback);
-	
+
 	image.src = src;
-	
+
 	return image;
 };
 
 const widowlessText = (text) => {
-	
-	if (text.split(" ").length > 2) {
-		const lastSpaceIndex = text.lastIndexOf(" ");
+	const lastSpaceIndex = text.lastIndexOf(" ");
+
+	if (lastSpaceIndex !== -1) {
 		text = `${text.substr(0, lastSpaceIndex)}\u00A0${text.substr(lastSpaceIndex + 1)}`;
 	}
-	
+
 	return text;
-}
+};
 
 module.exports = AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
@@ -71,7 +71,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		url_safe_title: {
 			deps: ["title"],
 			fn() {
-				return this.title.slice(0, 96).toLowerCase().replace(/[,\.:]/g, " ").replace(/\s/g, "_")
+				return this.title.slice(0, 96).toLowerCase().replace(/[,\.:]/g, " ").replace(/\s/g, "_");
 			}
 		},
 		images_uris: {
@@ -79,7 +79,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 			fn() {
 				const parent = this.collection.parent;
 				const seriesUrl = parent.url();
-				
+
 				return this.images.map(image => `${seriesUrl}/${image}`);
 			}
 		},
@@ -113,7 +113,7 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 	},
 	preloadImages(callback) {
 		const checkCallback = makeLoadCheckCallback(this.images.length, callback);
-		
+
 		this.images_uris.forEach(images_uri => preloadImage(images_uri, checkCallback));
 	}
 });

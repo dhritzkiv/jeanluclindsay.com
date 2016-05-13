@@ -21,11 +21,9 @@ const toSeriesModel = name => ({
 });
 
 //returns a JSON array with series models
-exports.getSeriesModels = (req, res, next) => {
+exports.getSeriesModels = (req, res) => {
 	const readdirStream = h.wrapCallback(fs.readdir);
 	const statStream = h.wrapCallback(fs.stat);
-
-	const series = [];
 
 	readdirStream(seriesDir).flatten()
 	.errors(err => console.error(err))
@@ -60,7 +58,6 @@ exports.findASeries = (req, res, next) => {
 
 exports.findASeriesPieces = (req, res, next) => {
 	const slug = req.params.slug;
-	const seriesData = req.resData.series;
 	const thisSeriesDir = path.join(seriesDir, slug);
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 
@@ -74,7 +71,7 @@ exports.findASeriesPieces = (req, res, next) => {
 	});
 
 	h(readStream)
-	.errors(err => {})
+	.errors(() => {})
 	.through(csvParser)
 	.errors(err => console.error(err))
 	.map(pieceData => {

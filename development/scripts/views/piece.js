@@ -47,7 +47,7 @@ module.exports = AmpersandView.extend({
 		},
 		"model.images_uris": {
 			type: (el, val) => {
-				const imagesString = val.reduce((string, uri) => string += `<img src="${uri}"/>\n`, "");
+				const imagesString = val.reduce((string, uri) => (string += `<img src="${uri}"/>\n`, ""));
 
 				el.innerHTML = imagesString;
 			},

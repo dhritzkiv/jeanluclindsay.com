@@ -8,9 +8,6 @@ const ASeriesPage = require("./views/a_series");
 const ASeriesPiecePage = require("./views/piece");
 const AboutPage = require("./views/about");
 
-const SeriesCollection = require("./models/series");
-const SeriesModel = require("./models/a_series");
-
 const DEFAULT_TITLE = "Jean-Luc Lindsay";
 
 module.exports = AmpersandRouter.extend({
@@ -37,7 +34,7 @@ module.exports = AmpersandRouter.extend({
 		}, (err, res, body) => {
 
 			if (err) {
-
+				return console.error(err);
 			}
 
 			const view = new AboutPage(body);

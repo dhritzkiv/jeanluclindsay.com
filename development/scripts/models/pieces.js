@@ -1,8 +1,9 @@
 "use strict";
 
-const Collection = require("ampersand-rest-collection");
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
+
+const Collection = require("ampersand-rest-collection");
 const PieceModel = require("./piece");
 
 module.exports = Collection.extend(ajaxConfig, {
@@ -13,7 +14,7 @@ module.exports = Collection.extend(ajaxConfig, {
 	model: PieceModel,
 	preloadThumbnails(callback) {
 		const checkCallback = makeLoadCheckCallback(this.length, callback);
-		
+
 		this.forEach(piece => piece.preloadThumbnail(checkCallback));
 	}
 });
