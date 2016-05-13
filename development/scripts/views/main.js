@@ -1,8 +1,8 @@
 "use strict";
 
 const View = require("ampersand-view");
-const ViewSwitcher = require('ampersand-view-switcher');
-const scroller = require('scroll');
+const ViewSwitcher = require("ampersand-view-switcher");
+const scroller = require("scroll");
 
 const CLASS_CLOSING = "closing";
 const CLASS_OPENING = "opening";
@@ -54,71 +54,71 @@ module.exports = View.extend({
 	},
 	render() {
 		this.renderWithTemplate();
-		
-		const mainEl = this.query('main');
+
+		const mainEl = this.query("main");
 
 		this.pageSwitcher = new ViewSwitcher(mainEl, {
 			waitForRemove: true,
 			hide: (oldView, callback) => {
 				const height = mainEl.clientHeight;
-				
+
 				scroller.top(document.scrollingElement, 0, {
 					duration: TRANSITION_TIMEOUT / 2,
 					ease: "inOutSine"
 				}, (err) => {
 					mainEl.style.height = `${height}px`;
-				
+
 					requestAnimationFrame(() => {
 						mainEl.getBoundingClientRect();
 						mainEl.classList.add(CLASS_CLOSING);
-						mainEl.style.height = "0px"
+						mainEl.style.height = "0px";
 					});
-					
+
 					setTimeout(() => {
 						mainEl.style.height = "";
 						mainEl.classList.remove(CLASS_CLOSING);
-						
+
 						callback();
 					}, TRANSITION_TIMEOUT);
-				});				
+				});
 			},
 			show: (newView) => {
 				const height = mainEl.clientHeight;
 				mainEl.style.height = "0px";
 				mainEl.classList.remove(CLASS_CLOSING);
 				mainEl.classList.add(CLASS_OPENING);
-				
+
 				requestAnimationFrame(() => {
 					mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
 					mainEl.style.height = `${height}px`;
 				});
-				
+
 				setTimeout(() => {
 					mainEl.classList.remove(CLASS_OPENING);
 					mainEl.style.height = "";
 				}, TRANSITION_TIMEOUT);
 			}
 		});
-		
+
 		this.renderCollection(app.series, SeriesItem, this.queryByHook("series-list"));
-		
+
 		return this;
 	},
 	setPage(page) {
-		
+
 		if (page) {
-			this.pageSwitcher.set(page)
+			this.pageSwitcher.set(page);
 		} else {
 			this.pageSwitcher.clear();
 		}
 	},
 	linkClick(event) {
 		const target = event.delegateTarget;
-		
+
 		if (target.host !== window.location.host) {
 			return true;
 		}
-		
+
 		app.router.navigate(target.pathname + target.search);
 		event.preventDefault();
 	}

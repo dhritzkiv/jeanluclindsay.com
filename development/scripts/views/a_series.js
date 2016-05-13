@@ -15,9 +15,9 @@ module.exports = AmpersandView.extend({
 	),
 	render() {
 		this.renderWithTemplate(this);
-		
+
 		this.renderCollection(this.model.pieces, PieceView, this.queryByHook("pieces-grid"));
-		
+
 		return this;
 	},
 	bindings: {
