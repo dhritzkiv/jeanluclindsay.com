@@ -29,11 +29,11 @@ module.exports = AmpersandView.extend({
 			name: "href",
 			selector: "a"
 		},
-		"model.title": {
+		"model.widowless_title": {
 			type: "text",
 			hook: "title"
 		},
-		"model.materials": {
+		"model.widowless_materials": {
 			type: "text",
 			hook: "materials"
 		},

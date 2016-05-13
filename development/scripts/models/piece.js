@@ -22,6 +22,16 @@ const preloadImage = (src, callback) => {
 	return image;
 };
 
+const widowlessText = (text) => {
+	
+	if (text.split(" ").length > 2) {
+		const lastSpaceIndex = text.lastIndexOf(" ");
+		text = `${text.substr(0, lastSpaceIndex)}\u00A0${text.substr(lastSpaceIndex + 1)}`;
+	}
+	
+	return text;
+}
+
 module.exports = AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
 	props: {
@@ -46,6 +56,18 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		}
 	},
 	derived: {
+		widowless_title: {
+			deps: ["title"],
+			fn() {
+				return widowlessText(this.title);
+			}
+		},
+		widowless_materials: {
+			deps: ["materials"],
+			fn() {
+				return widowlessText(this.materials);
+			}
+		},
 		url_safe_title: {
 			deps: ["title"],
 			fn() {
