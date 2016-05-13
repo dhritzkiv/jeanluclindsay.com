@@ -72,7 +72,7 @@ module.exports = AmpersandRouter.extend({
 	aSeriesPiece(seriesSlug, id) {
 		const router = this;
 		
-		id = id.slice(0, 22);
+		id = id.slice(-22);
 		
 		this._getASeries(seriesSlug, (err, seriesModel) => {
 			
