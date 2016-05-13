@@ -13,7 +13,7 @@ module.exports = AmpersandView.extend({
 			<section data-hook="pieces-grid"></section>
 		</article>`
 	),
-	render: function() {
+	render() {
 		this.renderWithTemplate(this);
 		
 		this.renderCollection(this.model.pieces, PieceView, this.queryByHook("pieces-grid"));

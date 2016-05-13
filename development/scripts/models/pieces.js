@@ -6,7 +6,7 @@ import makeLoadCheckCallback from "../misc/preload-helper";
 const PieceModel = require("./piece");
 
 module.exports = Collection.extend(ajaxConfig, {
-	url: function() {
+	url() {
 		return `${this.parent.url()}${this.urlRoot}`;
 	},
 	urlRoot: "/pieces",

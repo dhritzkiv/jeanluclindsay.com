@@ -26,6 +26,15 @@ const assetsOptions = {
 	cachebuster: true,
 	loadPaths: ["./public"]
 };
+	
+const browserSupport = [
+	'last 1 versions',
+	'last 2 Chrome versions',
+	'last 2 Firefox versions',
+	'Safari >=8',
+	'iOS >= 8',
+	'Explorer >= 11'
+];
 
 const uglifyOptions = {
 	mangle: true,
@@ -70,7 +79,7 @@ const uglifyOptions = {
 	}
 };
 
-function makeBundler(src) {
+const makeBundler = (src) => {
 
 	const bundler = browserify(src, {
 		cache: {},
@@ -91,39 +100,26 @@ function makeBundler(src) {
 	return bundler;
 }
 
-function makeBundle(bundler, targetFile) {
-	return function bundle() {
-		return bundler.bundle()
-		.on('error', err => console.error(err.message))
-		.pipe(source(targetFile))
-		.pipe(buffer())
-		.pipe(sourcemaps.init({loadMaps: true}))
-		.pipe(sourcemaps.write("./", {
-			addComment: true,
-			sourceRoot: "./"//source map points to files relative to the root of this repo.
-		}))
-		.pipe(gulp.dest(outputScriptsDir));
-	};
-}
+const makeBundle = (bundler, targetFile) => () => 
+	bundler.bundle()
+	.on('error', err => console.error(err.message))
+	.pipe(source(targetFile))
+	.pipe(buffer())
+	.pipe(sourcemaps.init({loadMaps: true}))
+	.pipe(sourcemaps.write("./", {
+		addComment: true,
+		sourceRoot: "./"//source map points to files relative to the root of this repo.
+	}))
+	.pipe(gulp.dest(outputScriptsDir));
 
 const clientAppBundler = makeBundler(path.join(sourceScriptsDir, "app.js"));
 const clientAppBundle = makeBundle(clientAppBundler, "main.min.js");
 
 gulp.task('app-bundle', clientAppBundle);
 
-gulp.task('sass', function() {
-	
-	const browserSupport = [
-		'last 1 versions',
-		'last 2 Chrome versions',
-		'last 2 Firefox versions',
-		'Safari >=8',
-		'iOS >= 8',
-		'Explorer >= 11'
-	];
-
-	return gulp.src(path.join(sourceStylesDir, "main.scss"))
-	//.pipe(sourcemaps.init())
+gulp.task('sass', () =>
+	gulp.src(path.join(sourceStylesDir, "main.scss"))
+	.pipe(sourcemaps.init())
 	.pipe(sass().on('error', sass.logError))
 	.pipe(postcss([
 		assets(assetsOptions),
@@ -132,12 +128,11 @@ gulp.task('sass', function() {
 		})
 	]))
 	//.pipe(sourcemaps.write('./maps'))
-	.pipe(gulp.dest(outputStylesDir));
-});
+	.pipe(gulp.dest(outputStylesDir)));
 
 gulp.task('browserify', ['app-bundle'], () => clientAppBundler.on('update', clientAppBundle));
 
-gulp.task('uglify-js-clients', function() {
+gulp.task('uglify-js-clients', () => {
 	const scriptFiles = fs.readdirSync(outputScriptsDir)
 	.filter(name => /\.js$/.test(name))
 	.map(name => path.join(outputScriptsDir, name));
@@ -154,7 +149,7 @@ gulp.task('uglify-js-clients', function() {
 	.pipe(gulp.dest(outputScriptsDir));
 });
 
-gulp.task('minify-css', function() {
+gulp.task('minify-css', () => {
 	const styleFiles = fs.readdirSync(outputStylesDir)
 	.filter(name => /\.css$/.test(name))
 	.map(name => path.join(outputStylesDir, name));
@@ -170,7 +165,4 @@ gulp.task('build', ['app-bundle', 'sass'], () => clientAppBundler.close());
 
 gulp.task('release', ['minify-css', 'uglify-js-clients']);
 
-gulp.task('watch', ["browserify"], function() {
-	gulp.watch(path.join(sourceStylesDir, "*.scss"), ["sass"]);
-	//gulp.start("browserify");
-});
+gulp.task('watch', ["browserify"], () => gulp.watch(path.join(sourceStylesDir, "*.scss"), ["sass"]));

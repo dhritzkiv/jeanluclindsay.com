@@ -52,7 +52,7 @@ module.exports = View.extend({
 	events: {
 		"click a[href]": "linkClick"
 	},
-	render: function() {
+	render() {
 		this.renderWithTemplate();
 		
 		const mainEl = this.query('main');
@@ -104,7 +104,7 @@ module.exports = View.extend({
 		
 		return this;
 	},
-	setPage: function(page) {
+	setPage(page) {
 		
 		if (page) {
 			this.pageSwitcher.set(page)
@@ -112,7 +112,7 @@ module.exports = View.extend({
 			this.pageSwitcher.clear();
 		}
 	},
-	linkClick: function(event) {
+	linkClick(event) {
 		const target = event.delegateTarget;
 		
 		if (target.host !== window.location.host) {

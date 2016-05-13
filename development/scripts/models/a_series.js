@@ -18,7 +18,7 @@ module.exports = Model.extend(ajaxConfig, {
 	derived: {
 		href: {
 			deps: ["slug"],
-			fn: function() {
+			fn() {
 				const safeSlug = this.slug.replace(/\s/, "_");
 				return `${this.urlRoot}/${safeSlug}`;
 			}

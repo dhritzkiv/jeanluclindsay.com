@@ -17,7 +17,7 @@ require('scrollingelement');
 }).install();*/
 
 app.extend({
-	initialize: function () {
+	initialize() {
 		
 		/*ga('create', "UA-47020641-4", {
 			'siteSpeedSampleRate': 50
@@ -29,7 +29,7 @@ app.extend({
 		
 		this.render();
 	},
-	render: function() {
+	render() {
 		
 		const view = this.view = new MainView({
 			el: document.body
@@ -41,7 +41,7 @@ app.extend({
 		
 		router.on('newPage', view.setPage, view);
 		
-		router.on('navigation', function() {
+		router.on('navigation', () => {
 			const path = window.location.pathname + window.location.search + window.location.hash;
 			
 			/*ga('set', 'page', path);
@@ -60,11 +60,11 @@ app.extend({
 });
 
 /* Google Analytics */
-/*(function() {
+/*(() => {
 	window.GoogleAnalyticsObject = 'ga';
 	var sciptTagName = 'script';
 
-	window.ga = function() {
+	window.ga = () => {
 		(ga.q = ga.q || []).push(arguments);
 	};
 
