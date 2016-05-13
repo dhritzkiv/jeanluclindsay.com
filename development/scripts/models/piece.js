@@ -1,8 +1,26 @@
 "use strict"
 
 import ajaxConfig from "../misc/ajax_config";
+import makeLoadCheckCallback from "../misc/preload-helper";
 
 const AmpersandModel = require("ampersand-model");
+
+const preloadImage = (src, callback) => {
+	const image = new Image();
+		
+	const imageCallback = () => {
+		image.removeEventListener("load", imageCallback);
+		image.removeEventListener("error", imageCallback);
+		callback();
+	};
+	
+	image.addEventListener("load", imageCallback);
+	image.addEventListener("error", imageCallback);
+	
+	image.src = src;
+	
+	return image;
+};
 
 module.exports = AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
@@ -63,14 +81,12 @@ module.exports = AmpersandModel.extend(ajaxConfig, {
 		}
 	},
 	preloadThumbnail(callback) {
-		const image = new Image();
+		preloadImage(this.first_image_thumbnail_uri, callback);
+	},
+	preloadImages(callback) {
+		const checkCallback = makeLoadCheckCallback(this.images.length, callback);
 		
-		image.addEventListener("load", callback);
-		image.addEventListener("error", callback);
-		
-		image.src = this.first_image_thumbnail_uri;
-		
-		return image;
+		this.images_uris.forEach(images_uri => preloadImage(images_uri, checkCallback));
 	}
 });
 

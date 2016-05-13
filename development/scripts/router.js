@@ -64,18 +64,7 @@ module.exports = AmpersandRouter.extend({
 			
 			seriesModel.pieces.fetch({
 				always: () => {
-					let loaded = 0;
-					const toLoad = seriesModel.pieces.length;
-					
-					const checkCallback = () => {
-						loaded++;
-						
-						if (loaded >= toLoad) {
-							router.trigger("newPage", view);
-						}
-					};
-					
-					seriesModel.pieces.forEach(piece => piece.preloadThumbnail(checkCallback));
+					seriesModel.pieces.preloadThumbnails(() => router.trigger("newPage", view));
 				}
 			});
 		});
@@ -109,7 +98,7 @@ module.exports = AmpersandRouter.extend({
 						collection: pieces
 					});
 					
-					router.trigger("newPage", view);
+					piece.preloadImages(() => router.trigger("newPage", view));
 				}
 			});			
 		});
