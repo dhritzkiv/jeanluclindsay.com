@@ -57,10 +57,21 @@ app.get("/series", seriesRouter.getSeriesModels);
 app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
 app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
 
+app.get("/series/:slug/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);
+
 app.use("/series", express.static(seriesFilesDirectory, {
 	maxAge: 1000 * 60 * 60 * 24
 }));
 
 app.get("/about", miscRouter.getBio);
+
+app.use((err, req, res, next) => {
+	
+	console.error(err);
+	
+	res.json({
+		message: new Error("Server error").message
+	});
+});
 
 app.listen(app.get("port"), () => console.log(`${new Date().toISOString()}: Server for ${app.get('title')} v.${app.get('version')} ${app.settings.env}, listening on port ${app.get('port')}`));

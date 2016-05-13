@@ -6,8 +6,10 @@ const os = require("os");
 const crypto = require('crypto');
 const h = require("highland");
 const csvParse = require("csv-parse");
+const gm = require("gm");
 
 const cpuCount = os.cpus().length;
+const tmpDir = os.tmpDir();
 
 const contentDir = path.join(process.cwd(), "content");
 const seriesDir = path.join(contentDir, "series");
@@ -115,3 +117,34 @@ exports.getASeries = (req, res) => res.json(req.resData.series);
 
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
+exports.findOrMakeThumbnail = (req, res, next) => {
+	const fileName = req.params.filename;
+	const thisSeriesDir = path.join(seriesDir, req.params.slug);
+	const filePath = path.join(thisSeriesDir, fileName);
+	const fileNameParsed = path.parse(filePath);
+	
+	if (!/_t$/.test(fileNameParsed.name)) {
+		return next("route");
+	}
+	
+	const originalPath = filePath.replace("_t", "");
+	const tmpPath = path.join(tmpDir, fileName);
+	
+	req.resData.thumbnailPath = tmpPath;
+	
+	fs.access(tmpPath, (err) => {
+		
+		if (!err) {
+			return next();
+		}
+		
+		gm(originalPath)
+		.quality(92)
+		.resize(392, null)
+		.write(tmpPath, next);
+	});
+};
+
+exports.getThumbnail = (req, res) => {
+	res.sendFile(req.resData.thumbnailPath);
+}
