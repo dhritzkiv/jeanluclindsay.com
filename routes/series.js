@@ -59,8 +59,9 @@ exports.findASeries = (req, res, next) => {
 };
 
 exports.findASeriesPieces = (req, res, next) => {
+	const slug = req.params.slug;
 	const seriesData = req.resData.series;
-	const thisSeriesDir = path.join(seriesDir, seriesData.slug);
+	const thisSeriesDir = path.join(seriesDir, slug);
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 	
 	const readStream = fs.createReadStream(piecesManifestPath);

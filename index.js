@@ -38,6 +38,7 @@ app.use(express.static(publicFilesDirectory, {
 	maxAge: 1000 * 60 * 60 * 24 * 7
 }));
 
+//init resData object
 app.use((req, res, next) => {
 	req.resData = {};
 	next();
