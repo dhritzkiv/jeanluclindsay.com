@@ -2,14 +2,13 @@
 
 import "babel-polyfill";
 
-const app = require("ampersand-app");
-const Raven = require("raven-js");
-const Router = require("./router");
-const WebFont = require("webfontloader");
-const MainView = require("./views/main");
-const SeriesCollection = require("./models/series");
-
-require("scrollingelement");
+import app from "ampersand-app";
+import Raven from "raven-js";
+import Router from "./router";
+import WebFont from "webfontloader";
+import MainView from "./views/main";
+import SeriesCollection from "./models/series";
+import "scrollingelement";
 
 Raven.config("__SENTRY_DSN__", {
 	release: "__VERSION__",
@@ -87,6 +86,6 @@ WebFont.load({
 	}
 });
 
-module.exports = window.app = app;
+export default window.app = app;
 
 app.initialize();

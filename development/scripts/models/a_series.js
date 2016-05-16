@@ -2,10 +2,10 @@
 
 import ajaxConfig from "../misc/ajax_config";
 
-const Model = require("ampersand-model");
-const PiecesCollection = require("./pieces");
+import Model from "ampersand-model";
+import PiecesCollection from "./pieces";
 
-module.exports = Model.extend(ajaxConfig, {
+export default Model.extend(ajaxConfig, {
 	idAttribute: "slug",
 	urlRoot: "/series",
 	props: {

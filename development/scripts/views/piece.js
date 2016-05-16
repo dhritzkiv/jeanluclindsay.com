@@ -1,8 +1,8 @@
 "use strict";
 
-const AmpersandView = require("ampersand-view");
+import AmpersandView from "ampersand-view";
 
-module.exports = AmpersandView.extend({
+export default AmpersandView.extend({
 	template: (
 		`<article class="a_series">
 			<header>

@@ -2,10 +2,10 @@
 
 import ajaxConfig from "../misc/ajax_config";
 
-const Collection = require("ampersand-rest-collection");
-const SeriesModel = require("./a_series");
+import Collection from "ampersand-rest-collection";
+import SeriesModel from "./a_series";
 
-module.exports = Collection.extend(ajaxConfig, {
+export default Collection.extend(ajaxConfig, {
 	url() {
 		return this.urlRoot;
 	},

@@ -2,9 +2,9 @@
 
 "use strict";
 
-const View = require("ampersand-view");
-const ViewSwitcher = require("ampersand-view-switcher");
-const scroller = require("scroll");
+import View from "ampersand-view";
+import ViewSwitcher from "ampersand-view-switcher";
+import scroller from "scroll";
 
 const CLASS_CLOSING = "closing";
 const CLASS_OPENING = "opening";
@@ -29,7 +29,7 @@ const SeriesItem = View.extend({
 	}
 });
 
-module.exports = View.extend({
+export default View.extend({
 	template: (
 		`<body>
 			<nav id="site-logo">

@@ -3,7 +3,7 @@
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
 
-const AmpersandModel = require("ampersand-model");
+import AmpersandModel from "ampersand-model";
 
 const preloadImage = (src, callback) => {
 	const image = new Image();
@@ -32,7 +32,7 @@ const widowlessText = (text) => {
 	return text;
 };
 
-module.exports = AmpersandModel.extend(ajaxConfig, {
+export default AmpersandModel.extend(ajaxConfig, {
 	urlRoot: "/series",
 	props: {
 		id: {

@@ -1,16 +1,16 @@
 "use strict";
 
-const app = require("ampersand-app");
-const xhr = require("xhr");
-const AmpersandRouter = require("ampersand-router");
-
-const ASeriesPage = require("./views/a_series");
-const ASeriesPiecePage = require("./views/piece");
-const AboutPage = require("./views/about");
 
 const DEFAULT_TITLE = "Jean-Luc Lindsay";
+import app from "ampersand-app";
+import xhr from "xhr";
+import AmpersandRouter from "ampersand-router";
+import ASeriesPage from "./views/a_series";
+import ASeriesPiecePage from "./views/piece";
+import AboutPage from "./views/about";
+import Raven from "raven-js";
 
-module.exports = AmpersandRouter.extend({
+export default AmpersandRouter.extend({
 	routes: {
 		"": "start",
 		"about": "about",

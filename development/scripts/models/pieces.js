@@ -3,10 +3,10 @@
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
 
-const Collection = require("ampersand-rest-collection");
-const PieceModel = require("./piece");
+import Collection from "ampersand-rest-collection";
+import PieceModel from "./piece";
 
-module.exports = Collection.extend(ajaxConfig, {
+export default Collection.extend(ajaxConfig, {
 	url() {
 		return `${this.parent.url()}${this.urlRoot}`;
 	},
