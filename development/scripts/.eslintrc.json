@@ -1,17 +1,12 @@
 {
+	"root": true,
 	"parserOptions": {
 		"ecmaVersion": 6,
-		"sourceType": "commonjs"
+		"sourceType": "module"
 	},
 	"env": {
-		"node": true,
 		"es6": true,
 		"browser": true
-	},
-	"globals": {
-		"require": true,
-		"module": true,
-		"exports": true
 	},
 	"rules": {
 		"semi": 2,
