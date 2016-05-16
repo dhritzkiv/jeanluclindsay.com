@@ -1,5 +1,3 @@
-"use strict";
-
 //A reusable mixin for providing sensible default ajax headers: JSON Content-Type.
 
 export default {

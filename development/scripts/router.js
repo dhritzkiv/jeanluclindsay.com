@@ -1,5 +1,3 @@
-"use strict";
-
 import app from "ampersand-app";
 import xhr from "xhr";
 import AmpersandRouter from "ampersand-router";

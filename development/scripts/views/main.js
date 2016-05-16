@@ -1,7 +1,5 @@
 /*globals app*/
 
-"use strict";
-
 import View from "ampersand-view";
 import ViewSwitcher from "ampersand-view-switcher";
 import scroller from "scroll";

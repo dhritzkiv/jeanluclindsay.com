@@ -1,8 +1,5 @@
-"use strict";
-
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
-
 import Collection from "ampersand-rest-collection";
 import PieceModel from "./piece";
 

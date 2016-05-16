@@ -1,5 +1,3 @@
-"use strict";
-
 import AmpersandView from "ampersand-view";
 import PieceView from "./piece_thumbnail";
 

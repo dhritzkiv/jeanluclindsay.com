@@ -1,7 +1,4 @@
-"use strict";
-
 import ajaxConfig from "../misc/ajax_config";
-
 import Collection from "ampersand-rest-collection";
 import SeriesModel from "./a_series";
 

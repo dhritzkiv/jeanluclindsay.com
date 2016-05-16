@@ -1,7 +1,4 @@
-"use strict";
-
 import ajaxConfig from "../misc/ajax_config";
-
 import Model from "ampersand-model";
 import PiecesCollection from "./pieces";
 

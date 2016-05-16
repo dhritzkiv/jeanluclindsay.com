@@ -1,5 +1,3 @@
-"use strict";
-
 export default (toLoad, callback) => {
 	let loaded = 0;
 

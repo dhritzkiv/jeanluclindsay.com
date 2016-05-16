@@ -1,8 +1,5 @@
-"use strict";
-
 import ajaxConfig from "../misc/ajax_config";
 import makeLoadCheckCallback from "../misc/preload-helper";
-
 import AmpersandModel from "ampersand-model";
 
 const preloadImage = (src, callback) => {

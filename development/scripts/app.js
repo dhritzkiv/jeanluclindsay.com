@@ -1,7 +1,4 @@
-"use strict";
-
 import "babel-polyfill";
-
 import app from "ampersand-app";
 import Raven from "raven-js";
 import Router from "./router";
