@@ -1,7 +1,5 @@
 "use strict";
 
-
-const DEFAULT_TITLE = "Jean-Luc Lindsay";
 import app from "ampersand-app";
 import xhr from "xhr";
 import AmpersandRouter from "ampersand-router";
@@ -20,9 +18,6 @@ export default AmpersandRouter.extend({
 	},
 	start() {
 		this.trigger("newPage", null);
-
-		document.title = DEFAULT_TITLE;
-
 		this.trigger("navigation");
 	},
 	about() {

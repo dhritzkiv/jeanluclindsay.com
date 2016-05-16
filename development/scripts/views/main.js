@@ -9,6 +9,7 @@ import scroller from "scroll";
 const CLASS_CLOSING = "closing";
 const CLASS_OPENING = "opening";
 const TRANSITION_TIMEOUT = 700;
+const DEFAULT_TITLE = "Jean-Luc Lindsay";
 
 const SeriesItem = View.extend({
 	template: (
@@ -84,7 +85,10 @@ export default View.extend({
 					}, TRANSITION_TIMEOUT);
 				});
 			},
-			show: () => {
+			show: (newView) => {
+
+				document.title = newView.pageTitle || DEFAULT_TITLE;
+
 				const height = mainEl.clientHeight;
 
 				mainEl.style.height = "0px";
