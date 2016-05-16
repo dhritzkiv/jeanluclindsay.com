@@ -75,8 +75,20 @@ app.use(raven.middleware.express.errorHandler(SENTRY_DSN));
 
 app.use((err, req, res, next) => {
 
+	let message = "Server error";
+
+	if (err.code) {
+		res.statusCode = err.code;
+	} else {
+		res.statusCode = 500;
+	}
+
+	if (res.statusCode < 400) {
+		message = err.client_message || err.message || message;
+	}
+
 	res.json({
-		message: "Server error",
+		message: message,
 		error_id: res.sentry
 	});
 
