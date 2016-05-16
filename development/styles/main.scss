@@ -109,7 +109,11 @@ nav#site-nav {
 
 .bio {
 	padding: 0 $page-padding 12px $page-padding;
-	max-width: 720px;
+	max-width: 960px;
+	
+	p {
+		font-size: 1.4em;
+	}
 }
 
 %close-button {
