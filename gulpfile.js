@@ -99,7 +99,7 @@ const makeBundler = (src) => {
 	});
 
 	bundler.transform("browserify-versionify", {
-		placeholder: '__SENTRY_DSN__',
+		placeholder: "__SENTRY_DSN__",
 		filter: /app\.js$/,
 		version: config.sentry_dsn_client
 	});

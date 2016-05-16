@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const h = require("highland");
 const csvParse = require("csv-parse");
 const gm = require("gm");
-const raven = require('raven');
+const raven = require("raven");
 
 const cpuCount = os.cpus().length;
 const tmpDir = os.tmpDir();
