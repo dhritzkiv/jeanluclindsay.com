@@ -16,6 +16,8 @@ const config = require(path.join(process.cwd(), "config"));
 const indexFileContents = fs.readFileSync(path.join(publicFilesDirectory, "index.html"), "utf8");
 
 const SENTRY_DSN = config.sentry_dsn_server;
+const STATIC_FILES_MAX_AGE = 1000 * 60 * 60 * 24 * 7;
+
 /*const config = (env => {
 	let configPath = path.join(process.cwd(), "config.json");
 
@@ -39,7 +41,7 @@ app.disable("x-powered-by");
 app.use(raven.middleware.express.requestHandler(SENTRY_DSN));
 
 app.use(express.static(publicFilesDirectory, {
-	maxAge: 1000 * 60 * 60 * 24 * 7
+	maxAge: STATIC_FILES_MAX_AGE
 }));
 
 //init resData object
@@ -58,14 +60,15 @@ app.get("*", (req, res, next) => {
 	res.send(indexFileContents);
 });
 
+app.get("/about", miscRouter.getBio);
+
 app.get("/series", seriesRouter.getSeriesModels);
 app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
 app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
 app.get("/series/:slug/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);
 
 app.use("/series", express.static(seriesFilesDirectory, {
-app.get("/about", miscRouter.getBio);
-	maxAge: 1000 * 60 * 60 * 24
+	maxAge: STATIC_FILES_MAX_AGE
 }));
 
 app.use(raven.middleware.express.errorHandler(SENTRY_DSN));
