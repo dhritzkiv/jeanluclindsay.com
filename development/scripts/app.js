@@ -3,7 +3,7 @@
 import "babel-polyfill";
 
 const app = require("ampersand-app");
-//const Raven = require("raven-js");
+const Raven = require("raven-js");
 const Router = require("./router");
 const WebFont = require("webfontloader");
 const MainView = require("./views/main");
@@ -11,10 +11,10 @@ const SeriesCollection = require("./models/series");
 
 require("scrollingelement");
 
-/*Raven.config("https://b2558f5fcd4342118dfb18e1dc0883e5@app.getsentry.com/64892", {
+Raven.config("__SENTRY_DSN__", {
 	release: "__VERSION__",
 	maxMessageLength: 512
-}).install();*/
+}).install();
 
 app.extend({
 	initialize() {
@@ -24,7 +24,6 @@ app.extend({
 		});*/
 
 		this.series = new SeriesCollection();
-
 		this.series.fetch();
 
 		this.render();

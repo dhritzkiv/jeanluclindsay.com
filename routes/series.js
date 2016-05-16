@@ -7,9 +7,12 @@ const crypto = require("crypto");
 const h = require("highland");
 const csvParse = require("csv-parse");
 const gm = require("gm");
+const raven = require('raven');
 
 const cpuCount = os.cpus().length;
 const tmpDir = os.tmpDir();
+
+const config = require(path.join(process.cwd(), "config"));
 
 const contentDir = path.join(process.cwd(), "content");
 const seriesDir = path.join(contentDir, "series");
@@ -20,16 +23,19 @@ const toSeriesModel = name => ({
 	title: name
 });
 
+const ravenClient = new raven.Client(config.sentry_dsn_server);
+const errorToRaven = (err) => ravenClient.captureException(err);
+
 //returns a JSON array with series models
 exports.getSeriesModels = (req, res) => {
 	const readdirStream = h.wrapCallback(fs.readdir);
 	const statStream = h.wrapCallback(fs.stat);
 
 	readdirStream(seriesDir).flatten()
-	.errors(err => console.error(err))
+	.errors(errorToRaven)
 	.map(filename =>
 		statStream(path.join(seriesDir, filename))
-		.errors(err => console.error(err))
+		.errors(errorToRaven)
 		.map(stat => ({
 			filename,
 			created_date: stat.birthtime,
@@ -73,7 +79,7 @@ exports.findASeriesPieces = (req, res, next) => {
 	h(readStream)
 	.errors(() => {})
 	.through(csvParser)
-	.errors(err => console.error(err))
+	.errors(errorToRaven)
 	.map(pieceData => {
 		pieceData.title = pieceData.title || "Untitled";
 

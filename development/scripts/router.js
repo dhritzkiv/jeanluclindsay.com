@@ -34,7 +34,7 @@ module.exports = AmpersandRouter.extend({
 		}, (err, res, body) => {
 
 			if (err) {
-				return console.error(err);
+				return Raven.captureException(err);
 			}
 
 			const view = new AboutPage(body);
@@ -52,7 +52,7 @@ module.exports = AmpersandRouter.extend({
 		this._getASeries(seriesSlug, (err, seriesModel) => {
 
 			if (err) {
-				return console.error(err);
+				return Raven.captureException(err);
 			}
 
 			const view = new ASeriesPage({
@@ -74,7 +74,7 @@ module.exports = AmpersandRouter.extend({
 		this._getASeries(seriesSlug, (err, seriesModel) => {
 
 			if (err) {
-				return console.error(err);
+				return Raven.captureException(err);
 			}
 
 			const pieces = seriesModel.pieces;
@@ -83,13 +83,13 @@ module.exports = AmpersandRouter.extend({
 				always: (err) => {
 
 					if (err) {
-						return console.error(err);
+						return Raven.captureException(err);
 					}
 
 					const piece = pieces.get(id);
 
 					if (!piece) {
-						console.error(new Error("Piece not found"));
+						return Raven.captureException(new Error("Piece not found"));
 					}
 
 					const view = new ASeriesPiecePage({

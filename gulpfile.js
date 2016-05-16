@@ -15,6 +15,7 @@ const autoprefixer = require("autoprefixer");
 const nano = require("gulp-cssnano");
 const assets = require("postcss-assets");
 
+const config = require(path.join(__dirname, "config"));
 const developmentDir = path.join(__dirname, "development");
 const publicDir = path.join(__dirname, "public");
 const sourceStylesDir = path.join(developmentDir, "styles");
@@ -95,6 +96,12 @@ const makeBundler = (src) => {
 	bundler.transform("browserify-versionify", {
 		filter: /app\.js$/,
 		version: require("./package.json").version
+	});
+
+	bundler.transform("browserify-versionify", {
+		placeholder: '__SENTRY_DSN__',
+		filter: /app\.js$/,
+		version: config.sentry_dsn_client
 	});
 
 	return bundler;
