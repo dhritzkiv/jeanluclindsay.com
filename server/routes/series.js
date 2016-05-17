@@ -12,7 +12,7 @@ const raven = require("raven");
 const cpuCount = os.cpus().length;
 const tmpDir = os.tmpDir();
 
-const config = require(path.join(process.cwd(), "config"));
+const config = require(path.join(process.cwd(), "..", "config"));
 
 const contentDir = path.join(process.cwd(), "content");
 const seriesDir = path.join(contentDir, "series");
@@ -23,13 +23,44 @@ const toSeriesModel = name => ({
 	title: name
 });
 
+const csvParserOptions = {
+	delimiter: ",",
+	columns: true,
+	skip_empty_lines: true,
+	trim: true
+};
+
 const ravenClient = new raven.Client(config.sentry_dsn_server);
 const errorToRaven = (err) => ravenClient.captureException(err);
 
+const caches = {
+	series: new WeakMap()
+};
+
+const cacheTime = 1000 * 60;//1 minute;
+let lastDate = new Date(0);//epoch
+
 //returns a JSON array with series models
 exports.getSeriesModels = (req, res) => {
+	
+	const currentDate = new Date();
+	const nextDate = new Date();
+	
+	nextDate.setTime(lastDate.getTime() + cacheTime);
+	
+	if (currentDate < nextDate) {
+		console.log("cache hit");
+		const seriesData = caches.series.get(lastDate);
+		
+		return res.json(seriesData);
+	}
+	
+	console.log("cache miss");
+	lastDate = currentDate;
+	
 	const readdirStream = h.wrapCallback(fs.readdir);
 	const statStream = h.wrapCallback(fs.stat);
+	const readStream = h.wrapCallback(fs.readFile);
 
 	readdirStream(seriesDir).flatten()
 	.errors(errorToRaven)
@@ -44,10 +75,29 @@ exports.getSeriesModels = (req, res) => {
 	)
 	.parallel(cpuCount)
 	.filter(fileObject => fileObject.isDirectory)
+	.map(directoryData => {
+		
+		const csvParser = csvParse(csvParserOptions);
+		
+		return readStream(path.join(seriesDir, directoryData.filename, piecesManifestName))
+		.errors(errorToRaven)
+		.through(csvParser)
+		.map(pieceData => new Date(pieceData.date.toString()))
+		.sortBy((a, b) => b - a)
+		.head()
+		.map(seriesLatestDate => Object.assign(directoryData, {
+			latest_date: seriesLatestDate
+		}));
+	})
+	.parallel(cpuCount)
 	.sortBy((a, b) => b.created_date - a.created_date)
+	.sortBy((a, b) => b.latest_date - a.latest_date)
 	.map(fileObject => fileObject.filename)
 	.map(toSeriesModel)
-	.toArray(series => res.json(series));
+	.toArray(series => {
+		caches.series.set(lastDate, series);
+		res.json(series)
+	});
 };
 
 exports.findASeries = (req, res, next) => {
@@ -69,12 +119,7 @@ exports.findASeriesPieces = (req, res, next) => {
 
 	const readStream = fs.createReadStream(piecesManifestPath);
 
-	const csvParser = csvParse({
-		delimiter: ",",
-		columns: true,
-		skip_empty_lines: true,
-		trim: true
-	});
+	const csvParser = csvParse(csvParserOptions);
 
 	h(readStream)
 	.errors(() => {})
@@ -110,7 +155,7 @@ exports.findASeriesPieces = (req, res, next) => {
 		});
 	})
 	.parallel(cpuCount)
-	.sortBy((a, b) => new Date(a.date.toString()) - new Date(b.date.toString()))
+	.sortBy((a, b) => new Date(b.date.toString()) - new Date(a.date.toString()))
 	.toArray(pieces => {
 		req.resData.pieces = pieces;
 		next();

@@ -15,9 +15,11 @@ const autoprefixer = require("autoprefixer");
 const nano = require("gulp-cssnano");
 const assets = require("postcss-assets");
 
-const config = require(path.join(__dirname, "config"));
-const developmentDir = path.join(__dirname, "development");
-const publicDir = path.join(__dirname, "public");
+const clientDir = path.join(process.cwd(), "client");
+
+const config = require(path.join(process.cwd(), "config"));
+const developmentDir = path.join(clientDir, "development");
+const publicDir = path.join(clientDir, "public");
 const sourceStylesDir = path.join(developmentDir, "styles");
 const outputStylesDir = path.join(publicDir, "css");
 const sourceScriptsDir = path.join(developmentDir, "scripts");
