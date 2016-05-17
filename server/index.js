@@ -7,8 +7,6 @@ const fs = require("fs");
 const express = require("express");
 const raven = require("raven");
 
-const weakCache = require(path.join(process.cwd(), "misc", "weak-cache.js"));
-
 const miscRouter = require(path.join(process.cwd(), "routes", "misc"));
 const seriesRouter = require(path.join(process.cwd(), "routes", "series"));
 

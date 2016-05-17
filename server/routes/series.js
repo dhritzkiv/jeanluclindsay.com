@@ -39,14 +39,15 @@ const errorToRaven = (err) => ravenClient.captureException(err);
 
 //returns a JSON array with series models
 exports.findSeriesModels = (req, res, next) => {
-	
-	let cachedSeries = cache.get(SERIES_CACHE_KEY);
-	
+
+	const cachedSeries = cache.get(SERIES_CACHE_KEY);
+
 	if (cachedSeries) {
 		req.resData.series = cachedSeries;
+
 		return next();
 	}
-	
+
 	const readdirStream = h.wrapCallback(fs.readdir);
 	const statStream = h.wrapCallback(fs.stat);
 	const readStream = h.wrapCallback(fs.readFile);
@@ -65,9 +66,9 @@ exports.findSeriesModels = (req, res, next) => {
 	.parallel(cpuCount)
 	.filter(fileObject => fileObject.isDirectory)
 	.map(directoryData => {
-		
+
 		const csvParser = csvParse(csvParserOptions);
-		
+
 		return readStream(path.join(seriesDir, directoryData.filename, piecesManifestName))
 		.errors(errorToRaven)
 		.through(csvParser)
@@ -108,15 +109,15 @@ exports.findASeries = (req, res, next) => {
 
 exports.findASeriesPieces = (req, res, next) => {
 	const slug = req.params.slug;
-	
+
 	const THIS_SERIES_CACHE_KEY = `SERIES_CACHE_KEY/${slug}`;
 	const cachedASeries = cache.get(THIS_SERIES_CACHE_KEY);
-	
+
 	if (cachedASeries) {
 		return res.json(cachedASeries);
 	}
-	
-	
+
+
 	const thisSeriesDir = path.join(seriesDir, slug);
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 
