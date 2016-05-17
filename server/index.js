@@ -7,6 +7,8 @@ const fs = require("fs");
 const express = require("express");
 const raven = require("raven");
 
+const weakCache = require(path.join(process.cwd(), "misc", "weak-cache.js"));
+
 const miscRouter = require(path.join(process.cwd(), "routes", "misc"));
 const seriesRouter = require(path.join(process.cwd(), "routes", "series"));
 
@@ -51,12 +53,6 @@ app.use(express.static(publicFilesDirectory, {
 	maxAge: STATIC_FILES_MAX_AGE
 }));
 
-//init resData object
-app.use((req, res, next) => {
-	req.resData = {};
-	next();
-});
-
 app.get("*", (req, res, next) => {
 
 	if (/\.[a-z0-9]{2,4}/i.test(req.url) || req.accepts("html", "json") === "json") {
@@ -67,9 +63,15 @@ app.get("*", (req, res, next) => {
 	res.send(indexFileContents);
 });
 
+//init resData object
+app.use((req, res, next) => {
+	req.resData = {};
+	next();
+});
+
 app.get("/about", miscRouter.getBio);
 
-app.get("/series", seriesRouter.getSeriesModels);
+app.get("/series", seriesRouter.findSeriesModels, seriesRouter.getSeriesModels);
 app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
 app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
 app.get("/series/:slug/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);

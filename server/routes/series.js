@@ -12,11 +12,15 @@ const raven = require("raven");
 const cpuCount = os.cpus().length;
 const tmpDir = os.tmpDir();
 
-const config = require(path.join(process.cwd(), "..", "config"));
+const cache = require(path.join(process.cwd(), "misc", "weak-cache.js"));
+const SERIES_CACHE_KEY = "series";
 
-const contentDir = path.join(process.cwd(), "content");
+const projectRoot = path.join(process.cwd(), "..");
+const contentDir = path.join(projectRoot, "content");
 const seriesDir = path.join(contentDir, "series");
 const piecesManifestName = "pieces.csv";
+
+const config = require(path.join(projectRoot, "config"));
 
 const toSeriesModel = name => ({
 	slug: name,
@@ -33,30 +37,15 @@ const csvParserOptions = {
 const ravenClient = new raven.Client(config.sentry_dsn_server);
 const errorToRaven = (err) => ravenClient.captureException(err);
 
-const caches = {
-	series: new WeakMap()
-};
-
-const cacheTime = 1000 * 60;//1 minute;
-let lastDate = new Date(0);//epoch
-
 //returns a JSON array with series models
-exports.getSeriesModels = (req, res) => {
+exports.findSeriesModels = (req, res, next) => {
 	
-	const currentDate = new Date();
-	const nextDate = new Date();
+	let cachedSeries = cache.get(SERIES_CACHE_KEY);
 	
-	nextDate.setTime(lastDate.getTime() + cacheTime);
-	
-	if (currentDate < nextDate) {
-		console.log("cache hit");
-		const seriesData = caches.series.get(lastDate);
-		
-		return res.json(seriesData);
+	if (cachedSeries) {
+		req.resData.series = cachedSeries;
+		return next();
 	}
-	
-	console.log("cache miss");
-	lastDate = currentDate;
 	
 	const readdirStream = h.wrapCallback(fs.readdir);
 	const statStream = h.wrapCallback(fs.stat);
@@ -95,9 +84,14 @@ exports.getSeriesModels = (req, res) => {
 	.map(fileObject => fileObject.filename)
 	.map(toSeriesModel)
 	.toArray(series => {
-		caches.series.set(lastDate, series);
-		res.json(series)
+		cache.set(SERIES_CACHE_KEY, series);
+		req.resData.series = series;
+		next();
 	});
+};
+
+exports.getSeriesModels = (req, res) => {
+	res.json(req.resData.series);
 };
 
 exports.findASeries = (req, res, next) => {
@@ -114,6 +108,15 @@ exports.findASeries = (req, res, next) => {
 
 exports.findASeriesPieces = (req, res, next) => {
 	const slug = req.params.slug;
+	
+	const THIS_SERIES_CACHE_KEY = `SERIES_CACHE_KEY/${slug}`;
+	const cachedASeries = cache.get(THIS_SERIES_CACHE_KEY);
+	
+	if (cachedASeries) {
+		return res.json(cachedASeries);
+	}
+	
+	
 	const thisSeriesDir = path.join(seriesDir, slug);
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 
@@ -158,6 +161,7 @@ exports.findASeriesPieces = (req, res, next) => {
 	.sortBy((a, b) => new Date(b.date.toString()) - new Date(a.date.toString()))
 	.toArray(pieces => {
 		req.resData.pieces = pieces;
+		cache.set(THIS_SERIES_CACHE_KEY, pieces);
 		next();
 	});
 };
