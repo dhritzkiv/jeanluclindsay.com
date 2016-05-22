@@ -68,6 +68,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/about", miscRouter.getBio);
+app.get("/contact", miscRouter.getContact);
 
 app.get("/series", seriesRouter.findSeriesModels, seriesRouter.getSeriesModels);
 app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);

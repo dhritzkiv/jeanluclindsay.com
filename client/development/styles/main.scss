@@ -59,6 +59,10 @@ a[href] {
 	}
 }
 
+ul {
+	list-style: square;
+}
+
 main {
 	position: relative;
 	transition: height 0ms $easeOutExpo, border-color 700ms $easeInOutExpo;
@@ -81,6 +85,28 @@ main {
 	&.opening {
 		transition-timing-function: $easeInOutExpo, $easeInOutExpo;
 		transition-duration: 700ms, 50ms;
+	}
+}
+
+%close-button {
+	position: absolute;
+	display: block;
+	top: 0px;
+	width: 21px;
+	height: 21px;
+	margin-left: -$page-padding;
+	width: $page-padding;
+	text-align: center;
+	font-family: "Lucida", "Lucida Grande", "Lucida Console", monospace;
+	font-size: 1em;
+	line-height: 21px;
+	color: $color-medium;
+	font-weight: 200;
+	transition: opacity 250ms $easeOutExpo;
+	
+	main.closing &,
+	main.opening & {
+		opacity: 0;
 	}
 }
 
@@ -107,34 +133,33 @@ nav#site-nav {
 	}
 }
 
-.bio {
-	padding: 0 $page-padding 12px $page-padding;
-	max-width: 960px;
+.about,
+.contact {
+	
+	article {	
+		padding: 0 $page-padding 12px $page-padding;
+		max-width: 960px;
+	}
 	
 	p {
 		font-size: 1.4em;
 	}
-}
-
-%close-button {
-	position: absolute;
-	display: block;
-	top: 0px;
-	width: 21px;
-	height: 21px;
-	margin-left: -$page-padding;
-	width: $page-padding;
-	text-align: center;
-	font-family: "Lucida", "Lucida Grande", "Lucida Console", monospace;
-	font-size: 1em;
-	line-height: 21px;
-	color: $color-medium;
-	font-weight: 200;
-	transition: opacity 250ms $easeOutExpo;
 	
-	main.closing &,
-	main.opening & {
-		opacity: 0;
+	header {
+		position: relative;
+		margin-left: $page-padding;
+		margin-bottom: 12px;
+		
+		a {
+			@extend %close-button;
+		}
+		
+		h2 {
+			font-size: 1em;
+			color: $color-dark;
+			font-weight: 200;
+			margin: 0;
+		}
 	}
 }
 

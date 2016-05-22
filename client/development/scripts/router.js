@@ -3,26 +3,26 @@ import xhr from "xhr";
 import AmpersandRouter from "ampersand-router";
 import ASeriesPage from "./views/a_series";
 import ASeriesPiecePage from "./views/piece";
-import AboutPage from "./views/about";
+import TextPage from "./views/static-text";
 import Raven from "raven-js";
 
 export default AmpersandRouter.extend({
 	routes: {
 		"": "start",
 		"about": "about",
+		"contact": "contact",
 		"series/:series": "aSeries",
 		"series/:series/:pieceId": "aSeriesPiece",
 		"(*path)": "catchAll"
 	},
 	start() {
 		this.trigger("newPage", null);
-		this.trigger("navigation");
 	},
-	about() {
+	_staticPage(url, ViewConstructor, viewOptions) {
 		const router = this;
-
+		
 		xhr({
-			url: "/about",
+			url: url,
 			json: true
 		}, (err, res, body) => {
 
@@ -30,9 +30,21 @@ export default AmpersandRouter.extend({
 				return Raven.captureException(err);
 			}
 
-			const view = new AboutPage(body);
+			const view = new ViewConstructor(Object.assign(viewOptions, body));
 
 			router.trigger("newPage", view);
+		});
+	},
+	about() {
+		this._staticPage("/about", TextPage, {
+			class: "about",
+			title: "About"
+		});
+	},
+	contact() {
+		this._staticPage("/contact", TextPage, {
+			class: "contact",
+			title: "Contact"
 		});
 	},
 	_getASeries(slug, callback) {
