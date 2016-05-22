@@ -35,7 +35,7 @@ export default AmpersandRouter.extend({
 			router.trigger("newPage", view);
 		});
 	},
-	_getASeries: (slug, callback) => {
+	_getASeries(slug, callback) {
 		slug = slug.replace("_", " ");
 		app.series.getOrFetch(slug, callback);
 	},
