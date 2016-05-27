@@ -171,6 +171,29 @@ exports.getASeries = (req, res) => res.json(req.resData.series);
 
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
+exports.getASeriesPiece = (req, res) => {
+	if (/*social*/) {
+		
+		(
+		`<meta property="og:type" content="website"/>
+		<meta property="og:title" content="jean-luc lindsay"/>
+		<meta property="og:url" content="https://jeanluclindsay.com"/>
+		<meta property="og:image" content="___"/>
+		<meta property="og:image:width" content="1200"/>
+		<meta property="og:image:height" content="630"/>
+		<meta property="og:description" content="jean-luc lindsay's portfolio"/>
+		
+		<meta name="twitter:card" content="summary_large_image"/>
+		<meta name="twitter:title" content="Jean-Luc Lindsay"/>
+		<meta name="twitter:image" content="___"/>
+		<meta name="twitter:image:width" content="1200"/>
+		<meta name="twitter:image:height" content="630"/>
+		<meta name="twitter:description" content="___"/>
+		<meta name="twitter:site" content="https://___"/>`
+		)
+	}	
+};
+
 exports.findOrMakeThumbnail = (req, res, next) => {
 	const fileName = req.params.filename;
 	const thisSeriesDir = path.join(seriesDir, req.params.slug);
