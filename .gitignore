@@ -3,5 +3,6 @@
 .settings
 node_modules
 /public
-/client/public
+/client/public/js
+/client/public/css
 /content
