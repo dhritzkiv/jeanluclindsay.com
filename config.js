@@ -1,7 +1,7 @@
 "use strict";
 
 const environment = process.env.NODE_ENV || "development";
-const port = 2039;
+const port = 3039;
 
 const config = {
 	environment,
