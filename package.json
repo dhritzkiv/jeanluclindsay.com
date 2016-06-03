@@ -18,7 +18,7 @@
     "ampersand-state": "^5.0.1",
     "ampersand-view": "^10.0.1",
     "ampersand-view-switcher": "^2.1.0",
-    "csv-parse": "^1.1.0",
+    "csv-parse": "^1.1.1",
     "express": "^4.13.4",
     "gm": "^1.22.0",
     "highland": "^2.8.1",
