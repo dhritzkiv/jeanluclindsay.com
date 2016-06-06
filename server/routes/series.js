@@ -172,25 +172,37 @@ exports.getASeries = (req, res) => res.json(req.resData.series);
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
 exports.getASeriesPiece = (req, res) => {
-	if (/*social*/) {
+	
+	const userAgent = req.headers["user-agent"].toLowerCase();
+	const isSocialCrawler = ["facebook", "twitter"].some(socialUserAgent => userAgent.includes(socialUserAgent));
+	
+	if (isSocialCrawler) {
 		
-		(
-		`<meta property="og:type" content="website"/>
-		<meta property="og:title" content="jean-luc lindsay"/>
-		<meta property="og:url" content="https://jeanluclindsay.com"/>
-		<meta property="og:image" content="___"/>
-		<meta property="og:image:width" content="1200"/>
-		<meta property="og:image:height" content="630"/>
-		<meta property="og:description" content="jean-luc lindsay's portfolio"/>
+		const html = (
+			`<!DOCTYPE HTML>
+			<html>
+				<head>
+					<meta property="og:type" content="website"/>
+					<meta property="og:title" content="${config.title}"/>
+					<meta property="og:url" content="${config.hostname}"/>
+					<meta property="og:image" content="___"/>
+					<meta property="og:image:width" content="1200"/>
+					<meta property="og:image:height" content="630"/>
+					<meta property="og:description" content="${config.description}"/>
+					
+					<meta name="twitter:card" content="summary_large_image"/>
+					<meta name="twitter:title" content="${config.title}"/>
+					<meta name="twitter:image" content="___"/>
+					<meta name="twitter:image:width" content="1200"/>
+					<meta name="twitter:image:height" content="630"/>
+					<meta name="twitter:description" content="${config.description}"/>
+					<meta name="twitter:site" content="${config.hostname}"/>
+				</head>
+			</html>`
+		);
 		
-		<meta name="twitter:card" content="summary_large_image"/>
-		<meta name="twitter:title" content="Jean-Luc Lindsay"/>
-		<meta name="twitter:image" content="___"/>
-		<meta name="twitter:image:width" content="1200"/>
-		<meta name="twitter:image:height" content="630"/>
-		<meta name="twitter:description" content="___"/>
-		<meta name="twitter:site" content="https://___"/>`
-		)
+		res.setHeader("content-type", "text/html");
+		res.send(html);
 	}	
 };
 

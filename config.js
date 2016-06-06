@@ -7,7 +7,9 @@ const config = {
 	environment,
 	port,
 	hostname: `http://localhost:${port}`,
-	sentry_dsn_client: "https://a3dba8a45490482fb632951b6eb60cc2@app.getsentry.com/78389"
+	sentry_dsn_client: "https://a3dba8a45490482fb632951b6eb60cc2@app.getsentry.com/78389",
+	title: "jean luc lindsay",
+	description: "jean-luc lindsay's portfolio"
 };
 
 if (environment === "production") {
