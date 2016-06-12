@@ -141,10 +141,6 @@ nav#site-nav {
 		max-width: 960px;
 	}
 	
-	p {
-		font-size: 1.4em;
-	}
-	
 	header {
 		position: relative;
 		margin-left: $page-padding;
@@ -160,6 +156,12 @@ nav#site-nav {
 			font-weight: 200;
 			margin: 0;
 		}
+	}
+}
+
+.about {
+	article {
+		text-transform: none;
 	}
 }
 
