@@ -6,6 +6,7 @@ import scroller from "scroll";
 
 const CLASS_CLOSING = "closing";
 const CLASS_OPENING = "opening";
+const CLASS_LOADING = "loading";
 const TRANSITION_TIMEOUT = 700;
 const DEFAULT_TITLE = "Jean-Luc Lindsay";
 
@@ -51,7 +52,8 @@ export default View.extend({
 		</body>`
 	),
 	events: {
-		"click a[href]": "linkClick"
+		"click a[href]": "linkClick",
+		"click #site-nav ul li a[href]": "navClick"
 	},
 	render() {
 		this.renderWithTemplate();
@@ -84,24 +86,28 @@ export default View.extend({
 				});
 			},
 			show: (newView) => {
-
 				document.title = newView.pageTitle || DEFAULT_TITLE;
-
-				const height = mainEl.clientHeight;
-
-				mainEl.style.height = "0px";
-				mainEl.classList.remove(CLASS_CLOSING);
-				mainEl.classList.add(CLASS_OPENING);
-
+				
+				mainEl.style.visibility = "hidden";
+				
 				requestAnimationFrame(() => {
-					mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
-					mainEl.style.height = `${height}px`;
+					const height = mainEl.clientHeight;
+					
+					mainEl.style.visibility = "";
+					mainEl.style.height = "0px";
+					mainEl.classList.remove(CLASS_CLOSING);
+					mainEl.classList.add(CLASS_OPENING);
+	
+					requestAnimationFrame(() => {
+						mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
+						mainEl.style.height = `${height}px`;
+					});
+	
+					setTimeout(() => {
+						mainEl.classList.remove(CLASS_OPENING);
+						mainEl.style.height = "";
+					}, TRANSITION_TIMEOUT);
 				});
-
-				setTimeout(() => {
-					mainEl.classList.remove(CLASS_OPENING);
-					mainEl.style.height = "";
-				}, TRANSITION_TIMEOUT);
 			}
 		});
 
@@ -116,6 +122,15 @@ export default View.extend({
 		} else {
 			this.pageSwitcher.clear();
 		}
+	},
+	navClick(event) {
+		const target = event.delegateTarget;
+		const listEl = target.parentNode;
+		const allNavListItems = this.queryAll("#site-nav ul li");
+		
+		app.router.once("newPage", () => listEl.classList.remove(CLASS_LOADING));
+		allNavListItems.forEach(el => el.classList.remove(CLASS_LOADING));
+		listEl.classList.add(CLASS_LOADING);
 	},
 	linkClick(event) {
 		const target = event.delegateTarget;

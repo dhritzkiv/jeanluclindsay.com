@@ -6,7 +6,6 @@ const gulp = require("gulp");
 const uglify = require("gulp-uglify");
 const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
-//const watchify = require('watchify');
 const browserify = require("browserify");
 const sass = require("gulp-sass");
 const sourcemaps = require("gulp-sourcemaps");

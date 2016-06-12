@@ -20,7 +20,7 @@ export default AmpersandRouter.extend({
 	},
 	_staticPage(url, ViewConstructor, viewOptions) {
 		const router = this;
-		
+
 		xhr({
 			url: url,
 			json: true

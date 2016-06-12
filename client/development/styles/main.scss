@@ -88,7 +88,7 @@ main {
 	}
 }
 
-%close-button {
+%left-side-graphic {
 	position: absolute;
 	display: block;
 	top: 0px;
@@ -97,6 +97,10 @@ main {
 	margin-left: -$page-padding;
 	width: $page-padding;
 	text-align: center;
+}
+
+%close-button {
+	@extend %left-side-graphic;
 	font-family: "Lucida", "Lucida Grande", "Lucida Console", monospace;
 	font-size: 1em;
 	line-height: 21px;
@@ -121,6 +125,16 @@ nav#site-logo {
 	}
 }
 
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    
+    to {
+        transform:rotate(360deg);
+    }
+}
+
 nav#site-nav {
 	margin-left: $page-padding;
 	line-height: 21px;
@@ -131,6 +145,21 @@ nav#site-nav {
 		padding: 0;
 		list-style: none;
 	}
+	
+	li {
+		position: relative;
+	}
+	
+	li.loading::before {
+		@extend %left-side-graphic;
+		display: inline-block;
+		content: "—";
+		animation-name: spin;
+		animation-duration: 1s;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+		animation-iteration-count: infinite;
+	}
 }
 
 .about,
@@ -139,10 +168,6 @@ nav#site-nav {
 	article {	
 		padding: 0 $page-padding 12px $page-padding;
 		max-width: 960px;
-	}
-	
-	p {
-		font-size: 1.4em;
 	}
 	
 	header {
@@ -160,6 +185,12 @@ nav#site-nav {
 			font-weight: 200;
 			margin: 0;
 		}
+	}
+}
+
+.about {
+	article {
+		text-transform: none;
 	}
 }
 
@@ -193,7 +224,7 @@ article.a_series {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: flex-start;
 	align-items: center;
 }
 
@@ -280,6 +311,24 @@ article.piece {
 				
 				img {
 					max-width: 640px;
+				}
+			}
+		}
+		
+		@media screen and (max-width: 640px) {
+			
+			figure {
+				flex-direction: column;
+				padding-right: $page-padding;
+			
+				figcaption {
+					order: 1;
+					padding-right: 0;
+					padding-top: 12px;
+				}
+				
+				[data-hook=images] {
+					order: 0;
 				}
 			}
 		}
