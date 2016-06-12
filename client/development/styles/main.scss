@@ -195,7 +195,7 @@ article.a_series {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: flex-start;
 	align-items: center;
 }
 
@@ -282,6 +282,24 @@ article.piece {
 				
 				img {
 					max-width: 640px;
+				}
+			}
+		}
+		
+		@media screen and (max-width: 640px) {
+			
+			figure {
+				flex-direction: column;
+				padding-right: $page-padding;
+			
+				figcaption {
+					order: 1;
+					padding-right: 0;
+					padding-top: 12px;
+				}
+				
+				[data-hook=images] {
+					order: 0;
 				}
 			}
 		}
