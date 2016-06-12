@@ -86,24 +86,28 @@ export default View.extend({
 				});
 			},
 			show: (newView) => {
-
 				document.title = newView.pageTitle || DEFAULT_TITLE;
-
-				const height = mainEl.clientHeight;
-
-				mainEl.style.height = "0px";
-				mainEl.classList.remove(CLASS_CLOSING);
-				mainEl.classList.add(CLASS_OPENING);
-
+				
+				mainEl.style.visibility = "hidden";
+				
 				requestAnimationFrame(() => {
-					mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
-					mainEl.style.height = `${height}px`;
+					const height = mainEl.clientHeight;
+					
+					mainEl.style.visibility = "";
+					mainEl.style.height = "0px";
+					mainEl.classList.remove(CLASS_CLOSING);
+					mainEl.classList.add(CLASS_OPENING);
+	
+					requestAnimationFrame(() => {
+						mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
+						mainEl.style.height = `${height}px`;
+					});
+	
+					setTimeout(() => {
+						mainEl.classList.remove(CLASS_OPENING);
+						mainEl.style.height = "";
+					}, TRANSITION_TIMEOUT);
 				});
-
-				setTimeout(() => {
-					mainEl.classList.remove(CLASS_OPENING);
-					mainEl.style.height = "";
-				}, TRANSITION_TIMEOUT);
 			}
 		});
 
