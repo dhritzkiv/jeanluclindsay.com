@@ -13,7 +13,7 @@ const config = {
 };
 
 if (environment === "production") {
-	config.hostname = "https://jeanluclinsday.com";
+	config.hostname = "https://jeanluclindsay.com";
 }
 
 config.sentry_dsn_server = process.env.SENTRY_DSN_SERVER || config.sentry_dsn_client;
