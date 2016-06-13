@@ -114,7 +114,9 @@ exports.findASeriesPieces = (req, res, next) => {
 	const cachedASeries = cache.get(THIS_SERIES_CACHE_KEY);
 
 	if (cachedASeries) {
-		return res.json(cachedASeries);
+		req.resData.pieces = cachedASeries;
+		
+		return next();
 	}
 
 
