@@ -1,7 +1,7 @@
 {
   "name": "jean-luc-lindsay",
   "private": "true",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Backend and Frontend for Jean-Luc Lindsay's Portfolio Site",
   "main": "index.js",
   "scripts": {
