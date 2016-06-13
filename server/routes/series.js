@@ -175,10 +175,8 @@ exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
 exports.getASeriesPiece = (req, res) => {
 	
-	const userAgent = req.headers["user-agent"].toLowerCase();
-	const isSocialCrawler = ["facebook", "twitter"].some(socialUserAgent => userAgent.includes(socialUserAgent));
 	
-	if (isSocialCrawler) {
+	if (req.isSocialCrawler) {
 		
 		const html = (
 			`<!DOCTYPE HTML>

@@ -41,9 +41,17 @@ app.use(express.static(publicFilesDirectory, {
 	maxAge: STATIC_FILES_MAX_AGE
 }));
 
+app.use((req, res, next) => {
+	const userAgent = req.header("user-agent").toLowerCase();
+	
+	req.isSocialCrawler = ["facebook", "twitter"].some(socialUserAgent => userAgent.includes(socialUserAgent));
+	
+	next();
+});
+
 app.get("*", (req, res, next) => {
 
-	if (/\.[a-z0-9]{2,4}/i.test(req.url) || req.accepts("html", "json") === "json") {
+	if (/\.[a-z0-9]{2,4}/i.test(req.url) || req.accepts("html", "json") === "json" || req.isSocialCrawler) {
 		return next();
 	}
 
