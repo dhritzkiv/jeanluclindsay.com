@@ -23,16 +23,6 @@ const SENTRY_DSN = config.sentry_dsn_server;
 const STATIC_FILES_MAX_AGE = 1000 * 60 * 60 * 24 * 7;
 const IS_PRODUCTION = config.environment === "production";
 
-/*const config = (env => {
-	let configPath = path.join(process.cwd(), "config.json");
-
-	if (env === "production") {
-		configPath = path.join(process.cwd(), "config-production.json");
-	}
-
-	return require(configPath);
-})(process.env.NODE_ENV);*/
-
 const app = express();
 
 app.set("title", packageInfo.name);
