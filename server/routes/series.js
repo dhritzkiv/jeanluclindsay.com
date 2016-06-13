@@ -138,7 +138,7 @@ exports.findASeriesPieces = (req, res, next) => {
 	.through(csvParser)
 	.errors(errorToRaven)
 	.map(pieceData => {
-		pieceData.title = pieceData.title || "Untitled";
+		pieceData.title = (pieceData.title || "Untitled").toLowerCase();
 
 		pieceData.images = (pieceData.images || "")
 		.split(",")
