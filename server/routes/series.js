@@ -212,7 +212,7 @@ exports.getASeriesPiece = (req, res, next) => {
 				gm(imageLocalPath).size((err, size) => {
 
 					const data = {
-						uri: `/series/images/${req.resData.series.slug}/${imagePath}`,
+						uri: `/series/${req.resData.series.slug}/images/${imagePath}`,
 						width: size.width,
 						height: size.height
 					};
