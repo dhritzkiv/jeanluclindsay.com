@@ -130,7 +130,6 @@ exports.findASeriesPieces = (req, res, next) => {
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 
 	const readStream = fs.createReadStream(piecesManifestPath);
-
 	const csvParser = csvParse(csvParserOptions);
 
 	h(readStream)
@@ -191,33 +190,68 @@ exports.getASeriesPiece = (req, res, next) => {
 	if (req.isSocialCrawler) {
 		const url = req.url;
 		const imagePaths = piece.images.map(image => image.replace(/(\.[a-z0-9]{2,4}$)/, "_t$1"));
-		const imageUri = `/series/images/${req.resData.series.slug}/${imagePaths[0]}`;
 		const pageTitle = `${piece.title} - ${config.title}`;
 
-		const html = (
+		let html = (
 			`<!DOCTYPE HTML>
 			<html>
-				<head>
-					<meta property="og:type" content="website"/>
-					<meta property="og:title" content="${pageTitle}"/>
-					<meta property="og:url" content="${url}"/>
-					<meta property="og:image" content="${imageUri}"/>
-					<!--<meta property="og:image:width" content="1200"/>
-					<meta property="og:image:height" content="630"/>-->
-					<meta property="og:description" content="${config.description}"/>
-					
-					<meta name="twitter:card" content="summary_large_image"/>
-					<meta name="twitter:title" content="${pageTitle}"/>
-					<meta name="twitter:image" content="${imageUri}"/>
-					<!--<meta name="twitter:image:width" content="1200"/>
-					<meta name="twitter:image:height" content="630"/>-->
-					<meta name="twitter:description" content="${config.description}"/>
-				</head>
-			</html>`
+				<head>`
 		);
 
-		res.setHeader("content-type", "text/html");
-		res.send(html);
+		html += (
+					`<meta property="og:type" content="website"/>
+					<meta property="og:title" content="${pageTitle}"/>
+					<meta property="og:url" content="${url}"/>`
+		);
+
+		h(imagePaths)
+		.map(imagePath => {
+			const imageLocalPath = path.join(tmpDir, imagePath);
+
+			return h((push) => {
+				gm(imageLocalPath).size((err, size) => {
+
+					const data = {
+						uri: `/series/images/${req.resData.series.slug}/${imagePath}`,
+						width: size.width,
+						height: size.height
+					};
+
+					push(err, data);
+					push(null, h.nil);
+				});
+			});
+		})
+		.parallel(cpuCount)
+		.toArray(images => {
+
+			images.forEach(imageData => {
+				html += (
+					`<meta property="og:image" content="${imageData.uri}"/>
+					<meta property="og:image:width" content="${imageData.width}"/>
+					<meta property="og:image:height" content="${imageData.height}"/>
+					
+					<meta name="twitter:image" content="${imageData.uri}"/>
+					<meta name="twitter:image:width" content="${imageData.width}"/>
+					<meta name="twitter:image:height" content="${imageData.height}"/>`
+				);
+			});
+
+			html += (
+					`<meta property="og:description" content="${config.description}"/>
+					<meta name="twitter:card" content="summary_large_image"/>
+					<meta name="twitter:title" content="${pageTitle}"/>
+					<meta name="twitter:description" content="${config.description}"/>`
+			);
+
+			html += (`
+					</head>
+				</html>`
+			);
+
+			res.setHeader("content-type", "text/html");
+			res.send(html);
+		});
 	} else {
 		res.json(piece);
 	}
