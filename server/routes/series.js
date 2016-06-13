@@ -22,6 +22,11 @@ const piecesManifestName = "pieces.csv";
 
 const config = require(path.join(projectRoot, "config"));
 
+const sendFileOptions = {
+	//maxAge in ms
+	maxAge: 1000 * 60 * 60 * 24 * 3
+};
+
 const toSeriesModel = name => ({
 	slug: name,
 	title: name
@@ -235,5 +240,9 @@ exports.findOrMakeThumbnail = (req, res, next) => {
 };
 
 exports.getThumbnail = (req, res) => {
-	res.sendFile(req.resData.thumbnailPath);
+	res.sendFile(req.resData.thumbnailPath, sendFileOptions);
+};
+
+exports.getImage = (req, res) => {
+	res.sendFile(path.join(`${contentDir}/series/${req.params.slug}/${req.params.filename}`), sendFileOptions);
 };

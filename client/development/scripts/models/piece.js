@@ -77,7 +77,7 @@ export default AmpersandModel.extend(ajaxConfig, {
 				const parent = this.collection.parent;
 				const seriesUrl = parent.url();
 
-				return this.images.map(image => `${seriesUrl}/${image}`);
+				return this.images.map(image => `${seriesUrl}/images/${image}`);
 			}
 		},
 		first_image_uri: {

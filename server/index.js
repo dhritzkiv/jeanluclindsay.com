@@ -71,11 +71,8 @@ app.get("/contact", miscRouter.getContact);
 app.get("/series", seriesRouter.findSeriesModels, seriesRouter.getSeriesModels);
 app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
 app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
-app.get("/series/:slug/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);
-
-app.use("/series", express.static(seriesFilesDirectory, {
-	maxAge: STATIC_FILES_MAX_AGE
-}));
+app.get("/series/:slug/images/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);
+app.get("/series/:slug/images/:filename", seriesRouter.getImage);
 
 if (IS_PRODUCTION) {
 	app.use(raven.middleware.express.errorHandler(SENTRY_DSN));
