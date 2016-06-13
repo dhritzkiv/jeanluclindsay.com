@@ -122,7 +122,7 @@ exports.findASeriesPieces = (req, res, next) => {
 
 	if (cachedASeries) {
 		req.resData.pieces = cachedASeries;
-		
+
 		return next();
 	}
 
@@ -179,21 +179,21 @@ exports.getASeries = (req, res) => res.json(req.resData.series);
 
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
-exports.getASeriesPiece = (req, res, next) => {	
+exports.getASeriesPiece = (req, res, next) => {
 	const pieces = req.resData.pieces;
 	const id = req.params.piece_name.slice(-ID_LENGTH);
 	const piece = pieces.find(piece => piece.id === id);
-	
+
 	if (!piece) {
 		return next(new Error(`Piece ${req.params.piece_name} not found`));
 	}
-	
+
 	if (req.isSocialCrawler) {
 		const url = req.url;
 		const imagePaths = piece.images.map(image => image.replace(/(\.[a-z0-9]{2,4}$)/, "_t$1"));
 		const imageUri = `/series/images/${req.resData.series.slug}/${imagePaths[0]}`;
-		const pageTitle = `${piece.title} – ${config.title}`;
-		
+		const pageTitle = `${piece.title} - ${config.title}`;
+
 		const html = (
 			`<!DOCTYPE HTML>
 			<html>
@@ -215,7 +215,7 @@ exports.getASeriesPiece = (req, res, next) => {
 				</head>
 			</html>`
 		);
-		
+
 		res.setHeader("content-type", "text/html");
 		res.send(html);
 	} else {

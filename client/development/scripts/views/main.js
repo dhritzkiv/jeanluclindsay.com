@@ -87,22 +87,22 @@ export default View.extend({
 			},
 			show: (newView) => {
 				document.title = newView.pageTitle || DEFAULT_TITLE;
-				
+
 				mainEl.style.visibility = "hidden";
-				
+
 				requestAnimationFrame(() => {
 					const height = mainEl.clientHeight;
-					
+
 					mainEl.style.visibility = "";
 					mainEl.style.height = "0px";
 					mainEl.classList.remove(CLASS_CLOSING);
 					mainEl.classList.add(CLASS_OPENING);
-	
+
 					requestAnimationFrame(() => {
 						mainEl.getBoundingClientRect();//needed to cause a layout reflow and trigger the css animation;
 						mainEl.style.height = `${height}px`;
 					});
-	
+
 					setTimeout(() => {
 						mainEl.classList.remove(CLASS_OPENING);
 						mainEl.style.height = "";
@@ -127,7 +127,7 @@ export default View.extend({
 		const target = event.delegateTarget;
 		const listEl = target.parentNode;
 		const allNavListItems = this.queryAll("#site-nav ul li");
-		
+
 		app.router.once("newPage", () => listEl.classList.remove(CLASS_LOADING));
 		allNavListItems.forEach(el => el.classList.remove(CLASS_LOADING));
 		listEl.classList.add(CLASS_LOADING);

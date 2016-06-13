@@ -11,9 +11,7 @@ const miscRouter = require(path.join(process.cwd(), "routes", "misc"));
 const seriesRouter = require(path.join(process.cwd(), "routes", "series"));
 
 const projectRoot = path.join(process.cwd(), "..");
-
 const publicFilesDirectory = path.join(projectRoot, "client", "public");
-const seriesFilesDirectory = path.join(projectRoot, "content", "series");
 
 const packageInfo = require(path.join(projectRoot, "package.json"));
 const config = require(path.join(projectRoot, "config"));
@@ -43,9 +41,9 @@ app.use(express.static(publicFilesDirectory, {
 
 app.use((req, res, next) => {
 	const userAgent = req.header("user-agent").toLowerCase();
-	
+
 	req.isSocialCrawler = ["facebook", "twitter"].some(socialUserAgent => userAgent.includes(socialUserAgent));
-	
+
 	next();
 });
 
