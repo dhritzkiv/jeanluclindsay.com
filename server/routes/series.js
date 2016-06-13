@@ -20,6 +20,8 @@ const contentDir = path.join(projectRoot, "content");
 const seriesDir = path.join(contentDir, "series");
 const piecesManifestName = "pieces.csv";
 
+const ID_LENGTH = 22;
+
 const config = require(path.join(projectRoot, "config"));
 
 const sendFileOptions = {
@@ -124,7 +126,6 @@ exports.findASeriesPieces = (req, res, next) => {
 		return next();
 	}
 
-
 	const thisSeriesDir = path.join(seriesDir, slug);
 	const piecesManifestPath = path.join(thisSeriesDir, piecesManifestName);
 
@@ -155,7 +156,7 @@ exports.findASeriesPieces = (req, res, next) => {
 		.map(buffer => {
 			const id = buffer
 			.toString("base64")
-			.slice(0, 22)//strip extra 2 characters
+			.slice(0, ID_LENGTH)//strip extra 2 characters
 			.toLowerCase()//this reduces uniquness, but it's still enough
 			.replace(/\//g, "_")
 			.replace(/\+/g, "-");
@@ -178,37 +179,48 @@ exports.getASeries = (req, res) => res.json(req.resData.series);
 
 exports.getASeriesPieces = (req, res) => res.json(req.resData.pieces);
 
-exports.getASeriesPiece = (req, res) => {
+exports.getASeriesPiece = (req, res, next) => {	
+	const pieces = req.resData.pieces;
+	const id = req.params.piece_name.slice(-ID_LENGTH);
+	const piece = pieces.find(piece => piece.id === id);
 	
+	if (!piece) {
+		return next(new Error(`Piece ${req.params.piece_name} not found`));
+	}
 	
 	if (req.isSocialCrawler) {
+		const url = req.url;
+		const imagePaths = piece.images.map(image => image.replace(/(\.[a-z0-9]{2,4}$)/, "_t$1"));
+		const imageUri = `/series/images/${req.resData.series.slug}/${imagePaths[0]}`;
+		const pageTitle = `${piece.title} – ${config.title}`;
 		
 		const html = (
 			`<!DOCTYPE HTML>
 			<html>
 				<head>
 					<meta property="og:type" content="website"/>
-					<meta property="og:title" content="${config.title}"/>
-					<meta property="og:url" content="${config.hostname}"/>
-					<meta property="og:image" content="___"/>
-					<meta property="og:image:width" content="1200"/>
-					<meta property="og:image:height" content="630"/>
+					<meta property="og:title" content="${pageTitle}"/>
+					<meta property="og:url" content="${url}"/>
+					<meta property="og:image" content="${imageUri}"/>
+					<!--<meta property="og:image:width" content="1200"/>
+					<meta property="og:image:height" content="630"/>-->
 					<meta property="og:description" content="${config.description}"/>
 					
 					<meta name="twitter:card" content="summary_large_image"/>
-					<meta name="twitter:title" content="${config.title}"/>
-					<meta name="twitter:image" content="___"/>
-					<meta name="twitter:image:width" content="1200"/>
-					<meta name="twitter:image:height" content="630"/>
+					<meta name="twitter:title" content="${pageTitle}"/>
+					<meta name="twitter:image" content="${imageUri}"/>
+					<!--<meta name="twitter:image:width" content="1200"/>
+					<meta name="twitter:image:height" content="630"/>-->
 					<meta name="twitter:description" content="${config.description}"/>
-					<meta name="twitter:site" content="${config.hostname}"/>
 				</head>
 			</html>`
 		);
 		
 		res.setHeader("content-type", "text/html");
 		res.send(html);
-	}	
+	} else {
+		res.json(piece);
+	}
 };
 
 exports.findOrMakeThumbnail = (req, res, next) => {

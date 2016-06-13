@@ -73,6 +73,7 @@ app.get("/series/:slug", seriesRouter.findASeries, seriesRouter.getASeries);
 app.get("/series/:slug/pieces", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPieces);
 app.get("/series/:slug/images/:filename", seriesRouter.findOrMakeThumbnail, seriesRouter.getThumbnail);
 app.get("/series/:slug/images/:filename", seriesRouter.getImage);
+app.get("/series/:slug/:piece_name", seriesRouter.findASeries, seriesRouter.findASeriesPieces, seriesRouter.getASeriesPiece);
 
 if (IS_PRODUCTION) {
 	app.use(raven.middleware.express.errorHandler(SENTRY_DSN));
