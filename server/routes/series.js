@@ -188,7 +188,7 @@ exports.getASeriesPiece = (req, res, next) => {
 	}
 
 	if (req.isSocialCrawler) {
-		const url = req.url;
+		const url = `${config.hostname}${req.url}`;
 		const imagePaths = piece.images.map(image => image.replace(/(\.[a-z0-9]{2,4}$)/, "_t$1"));
 		const pageTitle = `${piece.title} - ${config.title}`;
 
