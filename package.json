@@ -23,7 +23,7 @@
     "gm": "^1.22.0",
     "highland": "^2.8.1",
     "raven": "^0.11.0",
-    "raven-js": "^3.0.5",
+    "raven-js": "^3.2.0",
     "remarkable": "^1.6.2",
     "scroll": "^1.0.0",
     "scrollingelement": "^1.5.1",
