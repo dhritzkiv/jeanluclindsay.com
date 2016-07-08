@@ -27,7 +27,7 @@
     "remarkable": "^1.6.2",
     "scroll": "^1.0.0",
     "scrollingelement": "^1.5.1",
-    "webfontloader": "^1.6.24"
+    "webfontloader": "^1.6.26"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
