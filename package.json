@@ -36,7 +36,7 @@
     "babelify": "^7.3.0",
     "browserify": "^13.0.0",
     "browserify-versionify": "^1.0.6",
-    "eslint": "^2.12.0",
+    "eslint": "^3.1.1",
     "gulp": "^3.9.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-postcss": "^6.1.1",
