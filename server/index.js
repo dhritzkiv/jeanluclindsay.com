@@ -86,7 +86,7 @@ app.use((err, req, res, next) => {
 
 	let message = "Server error";
 
-	if (err.code) {
+	if (err.code >= 100 && err.code < 600) {
 		res.statusCode = err.code;
 	} else {
 		res.statusCode = 500;
