@@ -230,7 +230,7 @@ exports.getASeriesPiece = (req, res, next) => {
 					`<meta property="og:image" content="${imageData.uri}"/>
 					<meta property="og:image:width" content="${imageData.width}"/>
 					<meta property="og:image:height" content="${imageData.height}"/>
-					
+
 					<meta name="twitter:image" content="${imageData.uri}"/>
 					<meta name="twitter:image:width" content="${imageData.width}"/>
 					<meta name="twitter:image:height" content="${imageData.height}"/>`

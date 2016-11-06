@@ -68,7 +68,7 @@ export default AmpersandModel.extend(ajaxConfig, {
 		url_safe_title: {
 			deps: ["title"],
 			fn() {
-				return this.title.slice(0, 96).toLowerCase().replace(/[,\.:]/g, " ").replace(/\s/g, "_");
+				return this.title.slice(0, 96).toLowerCase().replace(/[,.:]/g, " ").replace(/\s/g, "_");
 			}
 		},
 		images_uris: {
