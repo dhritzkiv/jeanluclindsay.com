@@ -10,7 +10,7 @@ const gm = require("gm");
 const raven = require("raven");
 
 const cpuCount = os.cpus().length;
-const tmpDir = os.tmpDir();
+const tmpDir = os.tmpdir();
 
 const cache = require(path.join(process.cwd(), "misc", "weak-cache.js"));
 const SERIES_CACHE_KEY = "series";
