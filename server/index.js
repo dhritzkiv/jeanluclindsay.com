@@ -40,7 +40,7 @@ app.use(express.static(publicFilesDirectory, {
 }));
 
 app.use((req, res, next) => {
-	const userAgent = req.header("user-agent").toLowerCase();
+	const userAgent = (req.header("user-agent") || "").toLowerCase();
 
 	req.isSocialCrawler = ["facebook", "twitter"].some(socialUserAgent => userAgent.includes(socialUserAgent));
 
