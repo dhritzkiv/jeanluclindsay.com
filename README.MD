@@ -1,5 +1,7 @@
 # jeanluclindsay.com
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dhritzkiv/jeanluclindsay.com.svg)](https://greenkeeper.io/)
+
 The server and client for [jeanluclindsay.com](jeanluclindsay.com).
 
 ## Requirements
